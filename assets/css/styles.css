@@ -490,9 +490,9 @@ body {
     margin-bottom: 1rem;
 }
 
-.final-cta p {
+.final-cta > .container > p {
     font-size: 1.125rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .cta-note {
@@ -544,6 +544,113 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
+/* Beta Banner */
+.beta-banner {
+    background: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+}
+
+.beta-banner strong {
+    color: #fbbf24;
+}
+
+/* Beta Badge */
+.badge-beta {
+    background: #fbbf24;
+    color: #1f2937;
+    font-size: 0.8rem;
+    padding: 0.35rem 1rem;
+    border-radius: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+/* Beta Sign-Up Form */
+.beta-form {
+    max-width: 600px;
+    margin: 2rem auto 0;
+    text-align: left;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    transition: border-color 0.3s;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--white);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.form-group select option {
+    color: var(--text-dark);
+    background: var(--white);
+}
+
+.btn-submit {
+    display: block;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Patent Notice */
+.patent-notice {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+}
+
+.patent-footer {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 0.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero h1 {
@@ -568,5 +675,9 @@ body {
 
     .nav-menu {
         gap: 1rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
     }
 }
