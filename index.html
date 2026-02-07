@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chronos - Privacy-first automatic time tracking. Join the beta starting February 14, 2026. Patent pending technology with 95%+ file detection accuracy.">
-    <title>Chronos Timekeeping - Beta Launch | Privacy-First Time Tracking</title>
+    <meta name="description" content="Chronos Timekeeping - Automatic time tracking with 95%+ accuracy using patent-pending handle enumeration. Privacy-first, local processing, no screenshots. Join the beta February 14, 2026.">
+    <title>Chronos Timekeeping - Beta Launch | Automatic Privacy-First Time Tracking</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -15,9 +15,9 @@
                 <h1>Chronos</h1>
             </div>
             <ul class="nav-menu">
+                <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#beta-tiers">Beta Tiers</a></li>
-                <li><a href="#privacy">Privacy</a></li>
                 <li><a href="#signup" class="btn-cta">Join Beta</a></li>
             </ul>
         </div>
@@ -35,42 +35,96 @@
         <div class="container">
             <div class="hero-content">
                 <span class="badge badge-beta">Beta Program</span>
-                <h1>Privacy-First Time Tracking</h1>
-                <p class="hero-subtitle">Automatic time tracking with 95%+ file detection accuracy &mdash; all processed locally on your machine.</p>
-                <p class="hero-description">Chronos uses patent-pending technology to classify your work automatically. No screenshots saved. No cloud processing. No surveillance.</p>
+                <h1>Stop Losing Billable Hours</h1>
+                <p class="hero-subtitle">Chronos tracks your time automatically with 95%+ accuracy &mdash; no timers, no manual entry, no guesswork.</p>
+                <p class="hero-description">Using patent-pending handle enumeration, Chronos detects the exact file you're working on, matches it to a project, and logs your time in the background. Everything runs locally on your machine. Nothing leaves your device.</p>
                 <div class="hero-cta">
                     <a href="#signup" class="btn-primary">Sign Up for Beta</a>
-                    <a href="#features" class="btn-secondary">Learn More</a>
+                    <a href="#how-it-works" class="btn-secondary">See How It Works</a>
                 </div>
-                <p class="hero-note">Beta period: February 14 &ndash; March 14, 2026</p>
+                <p class="hero-note">Beta period: February 14 &ndash; March 14, 2026 &bull; Free access to all features</p>
             </div>
         </div>
     </section>
 
-    <!-- Privacy Promise -->
-    <section id="privacy" class="privacy-promise">
+    <!-- The Problem -->
+    <section class="problem-section">
         <div class="container">
-            <h2>Your Privacy is Non-Negotiable</h2>
-            <div class="promise-grid">
-                <div class="promise-item">
-                    <div class="promise-icon">&#x1f512;</div>
-                    <h3>No Screenshots Saved</h3>
-                    <p>Visual data exists only in memory for less than 100ms, then destroyed forever.</p>
+            <h2>The Revenue Leakage Problem</h2>
+            <p class="section-subtitle">Professionals who bill by the hour lose 15&ndash;30% of their billable time to inaccurate manual tracking.</p>
+            <div class="problem-grid">
+                <div class="problem-item">
+                    <h3>Manual Timers Fail</h3>
+                    <p>You forget to start them. You forget to stop them. You switch between tasks and lose track. At the end of the day, you reconstruct from memory &mdash; and memory is unreliable.</p>
                 </div>
-                <div class="promise-item">
-                    <div class="promise-icon">&#x1f4bb;</div>
-                    <h3>Local Processing</h3>
-                    <p>All AI runs on your computer. Your data never touches the cloud.</p>
+                <div class="problem-item">
+                    <h3>Window Title Parsing Is Inaccurate</h3>
+                    <p>When you open "Baker.pdf" in Adobe, existing tools can't tell if it's for Baker vs. County litigation, Baker LLC accounting, or Baker Construction. They guess &mdash; and guess wrong 30&ndash;40% of the time.</p>
                 </div>
-                <div class="promise-item">
-                    <div class="promise-icon">&#x1f510;</div>
-                    <h3>Encrypted Storage</h3>
-                    <p>AES-256 encryption protects your local database.</p>
+                <div class="problem-item">
+                    <h3>Cloud Trackers Expose Your Data</h3>
+                    <p>Most time trackers upload screenshots, keystrokes, or activity data to remote servers. For attorneys, consultants, and healthcare professionals, that's a compliance liability.</p>
                 </div>
-                <div class="promise-item">
-                    <div class="promise-icon">&#x1f6ab;</div>
-                    <h3>Zero Telemetry</h3>
-                    <p>We don't track you while you track your time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2>How Chronos Works</h2>
+            <p class="section-subtitle">Patent-pending handle enumeration replaces guesswork with certainty</p>
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Window Monitoring</h3>
+                    <p>Once per second, Chronos checks your active application. Uses just 0.1% CPU.</p>
+                </div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Handle Enumeration</h3>
+                    <p>Instead of parsing window titles, Chronos reads the OS-level file handles to get the actual file path.</p>
+                </div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Project Classification</h3>
+                    <p>The file path is matched to your project. <code>C:\Cases\Baker-vs-County\Baker.pdf</code> maps to the right client, every time.</p>
+                </div>
+                <div class="process-arrow">&rarr;</div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Encrypted Logging</h3>
+                    <p>Only metadata is stored &mdash; project name, activity type, timestamp &mdash; in an AES-256 encrypted local database.</p>
+                </div>
+            </div>
+            <div class="privacy-guarantee">
+                <p>No screenshots saved. No cloud processing. No data leaves your device. File content is never read &mdash; only the path.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Three-Method Detection -->
+    <section class="detection-section">
+        <div class="container">
+            <h2>Three-Method Detection</h2>
+            <p class="section-subtitle">Chronos runs three detection strategies in parallel and uses the highest-confidence result</p>
+            <div class="detection-grid">
+                <div class="detection-method">
+                    <h3>Title Parsing</h3>
+                    <p class="detection-speed">Fast &bull; ~50% of detections</p>
+                    <p>Regex extraction from window titles. Works well with apps that show full file paths (VS Code, Revit, AutoCAD).</p>
+                </div>
+                <div class="detection-method">
+                    <h3>File System Matching</h3>
+                    <p class="detection-speed">Medium &bull; ~30% of detections</p>
+                    <p>Searches your project folders for the active filename. Resolves ambiguity when titles are truncated or generic.</p>
+                </div>
+                <div class="detection-method featured-method">
+                    <h3>Handle Enumeration</h3>
+                    <p class="detection-speed">Precise &bull; ~20% of detections &bull; Patent Pending</p>
+                    <p>Queries the OS for every file handle open by the active process. Gets the exact file path, even when the window title says nothing useful. 95&ndash;98% accuracy on Windows.</p>
                 </div>
             </div>
         </div>
@@ -79,17 +133,17 @@
     <!-- Features Section -->
     <section id="features" class="features">
         <div class="container">
-            <h2>Powerful Features, Complete Privacy</h2>
+            <h2>Built for Professionals Who Bill by the Hour</h2>
 
             <div class="feature-block">
                 <div class="feature-content">
-                    <h3>AI-Powered Project Detection</h3>
-                    <p>Chronos automatically detects which project you're working on using local AI models. Define custom patterns based on apps, window titles, and file paths.</p>
+                    <h3>AI-Powered Project Digestion</h3>
+                    <p>Point Chronos at a project folder and it automatically profiles the contents &mdash; identifying file patterns, document numbering schemes (BATES, RFI, revision numbers), and activity types. It generates a project profile that defines how your time should be classified.</p>
                     <ul class="feature-list">
-                        <li>95%+ file detection accuracy via handle enumeration</li>
-                        <li>Custom classification rules</li>
-                        <li>All processing happens on your device</li>
-                        <li>Visual data destroyed after classification</li>
+                        <li>Auto-generates activity codes (Drafting, Review, Analysis, Research)</li>
+                        <li>Recognizes industry-specific patterns (legal, AEC, consulting)</li>
+                        <li>Portable project profiles stored as markdown files</li>
+                        <li>Runs locally via Ollama &mdash; no cloud AI</li>
                     </ul>
                     <span class="badge">Patent Pending</span>
                 </div>
@@ -97,27 +151,69 @@
 
             <div class="feature-block">
                 <div class="feature-content">
-                    <h3>Comprehensive Reporting</h3>
-                    <p>See where your time goes with daily, weekly, and monthly reports. Track earnings automatically by setting hourly rates per project.</p>
+                    <h3>Smart Activity Classification</h3>
+                    <p>Chronos doesn't just log which project you worked on &mdash; it classifies <em>what kind of work</em> you were doing. A two-tier system uses fast heuristics first (file extension, naming patterns) and only invokes local AI when confidence is below 85%.</p>
                     <ul class="feature-list">
-                        <li>Project time breakdowns</li>
-                        <li>Earnings tracking with hourly rates</li>
-                        <li>Export to CSV and JSON</li>
-                        <li>Perfect for invoicing and analysis</li>
+                        <li>Automatic service code assignment for billing</li>
+                        <li>Confidence scores on every classification</li>
+                        <li>Transparent detection method disclosure</li>
+                        <li>Manual override and correction for edge cases</li>
                     </ul>
                 </div>
             </div>
 
             <div class="feature-block">
                 <div class="feature-content">
-                    <h3>Lightweight &amp; Efficient</h3>
-                    <p>Chronos runs quietly in the background using less than 2% CPU. Smart idle detection automatically pauses tracking when you're away.</p>
+                    <h3>Comprehensive Reporting &amp; Export</h3>
+                    <p>Daily, weekly, and monthly reports with breakdowns by client, project, and activity type. Set hourly rates per project and Chronos calculates earnings automatically.</p>
                     <ul class="feature-list">
-                        <li>System tray integration</li>
-                        <li>Automatic idle detection</li>
-                        <li>Cross-platform (Windows, macOS, Linux)</li>
-                        <li>Minimal resource usage</li>
+                        <li>Client and project time breakdowns</li>
+                        <li>Earnings tracking with per-project hourly rates</li>
+                        <li>Export to CSV and PDF</li>
+                        <li>QuickBooks and FreshBooks integration (Elite tier)</li>
                     </ul>
+                </div>
+            </div>
+
+            <div class="feature-block">
+                <div class="feature-content">
+                    <h3>Lightweight &amp; Cross-Platform</h3>
+                    <p>Chronos runs in the background using less than 50MB of memory and 0.1% CPU. Smart idle detection pauses tracking when you step away. Starts in under 2 seconds.</p>
+                    <ul class="feature-list">
+                        <li>Windows (95&ndash;98% accuracy), macOS, and Linux</li>
+                        <li>System tray integration with quick controls</li>
+                        <li>Automatic idle detection and resume</li>
+                        <li>Works completely offline</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Section -->
+    <section id="privacy" class="privacy-promise">
+        <div class="container">
+            <h2>Privacy Is Not a Feature &mdash; It's the Architecture</h2>
+            <div class="promise-grid">
+                <div class="promise-item">
+                    <div class="promise-icon">&#x1f512;</div>
+                    <h3>No Screenshots</h3>
+                    <p>Visual data exists in memory for less than 100ms when AI classification runs, then is destroyed. Never written to disk.</p>
+                </div>
+                <div class="promise-item">
+                    <div class="promise-icon">&#x1f4bb;</div>
+                    <h3>Local-Only Processing</h3>
+                    <p>All detection, classification, and AI runs on your machine. Your data never touches an external server.</p>
+                </div>
+                <div class="promise-item">
+                    <div class="promise-icon">&#x1f510;</div>
+                    <h3>AES-256-GCM Encryption</h3>
+                    <p>Every database entry encrypted with a unique initialization vector. HMAC authentication detects tampering.</p>
+                </div>
+                <div class="promise-item">
+                    <div class="promise-icon">&#x1f6e1;</div>
+                    <h3>Compliance Ready</h3>
+                    <p>Attorney-client privilege protected. HIPAA compliant by design. No data transmission means no exposure risk.</p>
                 </div>
             </div>
         </div>
@@ -127,7 +223,7 @@
     <section id="beta-tiers" class="pricing">
         <div class="container">
             <h2>Beta Tiers</h2>
-            <p class="section-subtitle">Free during beta &mdash; help shape the product before launch</p>
+            <p class="section-subtitle">Full access, free during beta &mdash; help shape the product before launch</p>
 
             <div class="pricing-grid">
                 <div class="pricing-card featured">
@@ -140,11 +236,12 @@
                     <p class="savings">Feb 14 &ndash; Mar 14, 2026</p>
                     <ul class="pricing-features">
                         <li>Unlimited projects</li>
-                        <li>AI project classification</li>
-                        <li>Earnings &amp; hourly rate tracking</li>
-                        <li>Full reporting &amp; export</li>
-                        <li>API access</li>
-                        <li>Direct feedback channel</li>
+                        <li>All three detection methods + handle enumeration</li>
+                        <li>AI project digestion &amp; activity classification</li>
+                        <li>Earnings tracking with hourly rates</li>
+                        <li>Full reporting &amp; CSV/PDF export</li>
+                        <li>REST API access</li>
+                        <li>Direct feedback channel to dev team</li>
                     </ul>
                     <a href="#signup" class="btn-pricing">Sign Up &mdash; Pro / Elite</a>
                 </div>
@@ -158,49 +255,15 @@
                     <p class="savings">Feb 14 &ndash; Mar 14, 2026</p>
                     <ul class="pricing-features">
                         <li>Everything in Pro / Elite</li>
-                        <li>Team management dashboard</li>
-                        <li>Centralized reporting</li>
-                        <li>Volume deployment support</li>
-                        <li>Priority support &amp; onboarding</li>
-                        <li>Custom integration consultation</li>
+                        <li>Multi-user team management</li>
+                        <li>Admin dashboard with approval workflows</li>
+                        <li>Centralized reporting across team members</li>
+                        <li>Bidirectional sync (LAN or WAN)</li>
+                        <li>QuickBooks &amp; FreshBooks integration</li>
+                        <li>Volume deployment support &amp; onboarding</li>
                     </ul>
                     <a href="#signup" class="btn-pricing">Sign Up &mdash; Enterprise</a>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section class="how-it-works">
-        <div class="container">
-            <h2>How Chronos Protects Your Privacy</h2>
-            <div class="process-flow">
-                <div class="process-step">
-                    <div class="step-number">1</div>
-                    <h3>Active Window Polled</h3>
-                    <p>Once per second, Chronos checks your active application</p>
-                </div>
-                <div class="process-arrow">&rarr;</div>
-                <div class="process-step">
-                    <div class="step-number">2</div>
-                    <h3>Local AI Processing</h3>
-                    <p>Handle enumeration identifies files with 95%+ accuracy</p>
-                </div>
-                <div class="process-arrow">&rarr;</div>
-                <div class="process-step">
-                    <div class="step-number">3</div>
-                    <h3>Project Classification</h3>
-                    <p>Only the project name is extracted</p>
-                </div>
-                <div class="process-arrow">&rarr;</div>
-                <div class="process-step">
-                    <div class="step-number">4</div>
-                    <h3>Encrypted Storage</h3>
-                    <p>Metadata saved to AES-256 encrypted database</p>
-                </div>
-            </div>
-            <div class="privacy-guarantee">
-                <p>Visual data is destroyed immediately after processing&mdash;never saved to disk or sent over network.</p>
             </div>
         </div>
     </section>
@@ -211,20 +274,20 @@
             <h2>Who Is the Beta For?</h2>
             <div class="use-case-grid">
                 <div class="use-case">
-                    <h3>Freelancers &amp; Consultants</h3>
-                    <p>Track billable hours by client automatically. Export time data for accurate invoicing without lifting a finger.</p>
+                    <h3>Legal Professionals</h3>
+                    <p>Expert witnesses, litigation attorneys, and paralegals. Track time across case files, depositions, and document review with attorney-client privilege fully protected.</p>
                 </div>
                 <div class="use-case">
-                    <h3>Developers &amp; Engineers</h3>
-                    <p>Auto-classify time based on codebase folders and file paths. Integrate with your workflow via API.</p>
+                    <h3>Architecture, Engineering &amp; Construction</h3>
+                    <p>BIM managers, architects, and VDC coordinators. Auto-detect time across Revit models, Navisworks reviews, AutoCAD drawings, and project deliverables.</p>
                 </div>
                 <div class="use-case">
-                    <h3>Architecture &amp; BIM Professionals</h3>
-                    <p>Track time across Revit models, Navisworks reviews, and project deliverables automatically.</p>
+                    <h3>Consultants &amp; Freelancers</h3>
+                    <p>Management consultants, IT contractors, and solo professionals juggling multiple clients. Automatic invoicing data without a single timer click.</p>
                 </div>
                 <div class="use-case">
-                    <h3>Teams &amp; Managers</h3>
-                    <p>Privacy-respecting time visibility across your team. No surveillance&mdash;just data for better project estimation.</p>
+                    <h3>Development Teams</h3>
+                    <p>Software engineers and tech leads. Classify time by codebase, branch, and project folder. API access for integration with your existing workflow tools.</p>
                 </div>
             </div>
         </div>
@@ -261,14 +324,28 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="platform">Primary Platform</label>
-                    <select id="platform" name="platform" required>
-                        <option value="" disabled selected>Select your OS</option>
-                        <option value="windows">Windows</option>
-                        <option value="macos">macOS</option>
-                        <option value="linux">Linux</option>
-                    </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="platform">Primary Platform</label>
+                        <select id="platform" name="platform" required>
+                            <option value="" disabled selected>Select your OS</option>
+                            <option value="windows">Windows</option>
+                            <option value="macos">macOS</option>
+                            <option value="linux">Linux</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="industry">Industry</label>
+                        <select id="industry" name="industry">
+                            <option value="" disabled selected>Select your industry</option>
+                            <option value="legal">Legal / Expert Witness</option>
+                            <option value="aec">Architecture / Engineering / Construction</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="software">Software Development</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
                 </div>
                 <button type="submit" class="btn-primary btn-submit">Request Beta Access</button>
             </form>
@@ -282,13 +359,14 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-section">
-                    <h4>Chronos</h4>
-                    <p>Privacy-first time tracking for the modern workforce.</p>
+                    <h4>Chronos Timekeeping</h4>
+                    <p>Automatic, privacy-first time tracking for professionals who bill by the hour.</p>
                     <p class="patent-notice">Patent Pending<br>U.S. Provisional Patent Application No. 63/968,309</p>
                 </div>
                 <div class="footer-section">
                     <h4>Product</h4>
                     <ul>
+                        <li><a href="#how-it-works">How It Works</a></li>
                         <li><a href="#features">Features</a></li>
                         <li><a href="#beta-tiers">Beta Tiers</a></li>
                         <li><a href="#signup">Join Beta</a></li>

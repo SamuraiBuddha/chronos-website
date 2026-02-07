@@ -637,6 +637,105 @@ body {
     letter-spacing: 0.05em;
 }
 
+/* Problem Section */
+.problem-section {
+    padding: 5rem 0;
+}
+
+.problem-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.problem-item {
+    padding: 2rem;
+    border-left: 4px solid #ef4444;
+    background: #fef2f2;
+    border-radius: 0 1rem 1rem 0;
+}
+
+.problem-item h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #dc2626;
+}
+
+.problem-item p {
+    color: var(--text-light);
+}
+
+/* Detection Section */
+.detection-section {
+    padding: 5rem 0;
+    background: var(--bg-light);
+}
+
+.detection-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.detection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.detection-method {
+    padding: 2rem;
+    background: var(--white);
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.detection-method.featured-method {
+    border: 3px solid var(--primary-color);
+    background: #eff6ff;
+}
+
+.detection-method h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
+}
+
+.detection-speed {
+    font-size: 0.85rem;
+    color: var(--success);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.detection-method p:last-child {
+    color: var(--text-light);
+}
+
+/* How It Works - subtitle */
+.how-it-works .section-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 1.125rem;
+    margin-top: -2rem;
+    margin-bottom: 3rem;
+}
+
+/* Code inline */
+code {
+    background: rgba(0, 0, 0, 0.08);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+}
+
 /* Patent Notice */
 .patent-notice {
     margin-top: 1rem;
