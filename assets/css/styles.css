@@ -46,7 +46,19 @@ body {
     padding: 1rem 2rem;
 }
 
-.nav-brand h1 {
+.nav-brand a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+}
+
+.nav-logo {
+    height: 2.25rem;
+    width: auto;
+}
+
+.nav-brand span {
     color: var(--primary-color);
     font-size: 1.75rem;
     font-weight: 700;
@@ -80,6 +92,14 @@ body {
 
 .btn-cta:hover {
     background: var(--primary-dark);
+}
+
+/* Hero Logo */
+.hero-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
 }
 
 /* Hero Section */
