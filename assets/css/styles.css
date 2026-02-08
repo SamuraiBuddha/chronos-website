@@ -54,8 +54,11 @@ body {
 }
 
 .nav-logo {
-    height: 2.25rem;
-    width: auto;
+    height: 2.5rem;
+    width: 2.5rem;
+    max-height: 2.5rem;
+    object-fit: contain;
+    border-radius: 0.4rem;
 }
 
 .nav-brand span {
@@ -96,8 +99,10 @@ body {
 
 /* Hero Logo */
 .hero-logo {
-    width: 150px;
-    height: auto;
+    width: 120px;
+    height: 120px;
+    max-width: 120px;
+    object-fit: contain;
     margin-bottom: 1.5rem;
     filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
 }
