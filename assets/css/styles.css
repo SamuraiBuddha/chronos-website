@@ -761,6 +761,22 @@ code {
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
+/* Form Success State */
+.form-success {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.form-success h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.form-success .btn-primary {
+    display: inline-block;
+    margin-top: 1rem;
+}
+
 /* Patent Notice */
 .patent-notice {
     margin-top: 1rem;
