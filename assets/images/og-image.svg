@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Define gradients -->
+  <defs>
+    <!-- Dark gradient background -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Accent gradient for accents -->
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#818cf8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Decorative accent circle (top right) -->
+  <circle cx="1050" cy="80" r="180" fill="#6366f1" opacity="0.1"/>
+
+  <!-- Decorative accent circle (bottom left) -->
+  <circle cx="100" cy="580" r="150" fill="#6366f1" opacity="0.08"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accentGradient)"/>
+
+  <!-- Main content container -->
+  <g>
+    <!-- Clock icon (geometric, top left area) -->
+    <g transform="translate(120, 120)">
+      <!-- Clock circle -->
+      <circle cx="0" cy="0" r="40" fill="none" stroke="#6366f1" stroke-width="3"/>
+
+      <!-- Clock hands -->
+      <line x1="0" y1="0" x2="0" y2="-25" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="18" y2="12" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+
+      <!-- Center dot -->
+      <circle cx="0" cy="0" r="4" fill="#6366f1"/>
+    </g>
+
+    <!-- Main heading -->
+    <text x="600" y="210" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="-1">
+      Chronos Timekeeping
+    </text>
+
+    <!-- Subtitle -->
+    <text x="600" y="290" font-family="Arial, sans-serif" font-size="36" fill="#c9c9d4" text-anchor="middle" letter-spacing="0.5">
+      Automatic Privacy-First Time Tracking
+    </text>
+
+    <!-- Accent divider line -->
+    <line x1="350" y1="330" x2="850" y2="330" stroke="#6366f1" stroke-width="2" opacity="0.6"/>
+
+    <!-- Tagline with features -->
+    <text x="600" y="400" font-family="Arial, sans-serif" font-size="24" fill="#a8aac5" text-anchor="middle" font-weight="500">
+      95%+ Accuracy • Patent Pending • Local Processing
+    </text>
+
+    <!-- Website URL at bottom -->
+    <text x="600" y="570" font-family="Arial, sans-serif" font-size="28" fill="#6366f1" text-anchor="middle" font-weight="600" letter-spacing="0.5">
+      chronos-timekeeping.com
+    </text>
+
+    <!-- Bottom accent elements -->
+    <rect x="400" y="595" width="400" height="2" fill="url(#accentGradient)" opacity="0.7"/>
+  </g>
+</svg>
