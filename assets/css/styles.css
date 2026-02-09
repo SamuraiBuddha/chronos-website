@@ -267,6 +267,13 @@ body {
     position: relative;
 }
 
+.feature-detail {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
 .feature-list li:before {
     content: "✓";
     position: absolute;
