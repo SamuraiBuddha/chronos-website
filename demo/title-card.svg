@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="1600" cy="200" r="300" fill="#6366f1" opacity="0.08"/>
+  <circle cx="200" cy="900" r="250" fill="#6366f1" opacity="0.06"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1920" height="4" fill="url(#accent)"/>
+
+  <!-- Clock icon -->
+  <g transform="translate(960, 300)">
+    <circle cx="0" cy="0" r="80" fill="none" stroke="#6366f1" stroke-width="4"/>
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="#6366f1" stroke-width="3" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="35" y2="20" stroke="#818cf8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="6" fill="#6366f1"/>
+  </g>
+
+  <!-- Main title -->
+  <text x="960" y="480" font-family="Arial, Helvetica, sans-serif" font-size="96" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="-2">
+    Chronos Timekeeping
+  </text>
+
+  <!-- Subtitle -->
+  <text x="960" y="560" font-family="Arial, Helvetica, sans-serif" font-size="42" fill="#c9c9d4" text-anchor="middle">
+    Stop Losing Billable Hours
+  </text>
+
+  <!-- Divider -->
+  <line x1="660" y1="610" x2="1260" y2="610" stroke="#6366f1" stroke-width="2" opacity="0.5"/>
+
+  <!-- Tagline -->
+  <text x="960" y="680" font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#a8aac5" text-anchor="middle">
+    Automatic Time Tracking with 95%+ Accuracy
+  </text>
+
+  <!-- Patent notice -->
+  <text x="960" y="740" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#6366f1" text-anchor="middle">
+    Patent Pending - U.S. Provisional Application No. 63/968,309
+  </text>
+
+  <!-- Bottom accent -->
+  <rect x="0" y="1076" width="1920" height="4" fill="url(#accent)"/>
+</svg>
