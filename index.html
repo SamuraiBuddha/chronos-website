@@ -90,6 +90,62 @@
         }
     }
     </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is Chronos Timekeeping?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Chronos Timekeeping is automatic time tracking software that uses patent-pending handle enumeration to detect the exact file you're working on with 95-98% accuracy. It runs locally on your machine with no screenshots, no cloud processing, and AES-256 encryption."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How is Chronos different from other time tracking apps?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most time trackers rely on manual timers or window title parsing, which is only 60-70% accurate. Chronos uses OS-level handle enumeration to read the actual file path from the operating system, achieving 95-98% accuracy. It also runs 100% locally — no data ever leaves your device."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How much does Chronos cost?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Chronos Pro is $9.99/month or $99.99/year for solo professionals. Enterprise is $19.99/seat/month for teams. The beta (February 14 - March 14, 2026) is completely free with full access to all features."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does Chronos take screenshots or send data to the cloud?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Chronos is privacy-first by architecture. All processing happens locally on your machine. No screenshots are stored, no data is transmitted, and the local database is encrypted with AES-256-GCM. It is designed to protect attorney-client privilege and meet HIPAA compliance requirements."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What platforms does Chronos support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Chronos runs on Windows (95-98% accuracy with handle enumeration), macOS (80-90% accuracy), and Linux (80-90% accuracy). It uses less than 50MB of memory and 0.1% CPU."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is Chronos good for lawyers and legal professionals?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Chronos was designed with legal professionals in mind. It automatically tracks time across case files, depositions, and document review while fully protecting attorney-client privilege. No data leaves your device, making it ideal for expert witnesses, litigation attorneys, and paralegals."
+                }
+            }
+        ]
+    }
+    </script>
 
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -398,6 +454,39 @@
                 <div class="use-case">
                     <h3>Development Teams</h3>
                     <p>Software engineers and tech leads. Classify time by codebase, branch, and project folder. API access for integration with your existing workflow tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section (SEO) -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>What is handle enumeration?</h3>
+                    <p>Handle enumeration is Chronos's patent-pending technology that queries the operating system for every file handle open by the active process. Instead of guessing from the window title, it gets the exact file path &mdash; like <code>C:\Cases\Baker-vs-County\Baker.pdf</code> &mdash; achieving 95&ndash;98% detection accuracy on Windows.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>How is this different from Toggl, Harvest, or Clockify?</h3>
+                    <p>Those tools rely on manual timers or basic window title parsing. Chronos is fully automatic &mdash; no start/stop buttons. It detects files at the OS level, classifies activity with local AI, and runs 100% offline. No data ever leaves your device.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is my data safe?</h3>
+                    <p>Yes. Chronos stores only metadata (file paths, timestamps, project names) in an AES-256-GCM encrypted local database. File contents are never read. Nothing is transmitted. Designed for attorney-client privilege and HIPAA compliance.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Do I need an internet connection?</h3>
+                    <p>No. Chronos works completely offline. Internet is only needed for license activation and optional AI model downloads. All tracking, detection, and reporting runs locally.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What happens after the beta ends?</h3>
+                    <p>You'll have the option to subscribe to Pro ($9.99/mo) or Enterprise ($19.99/seat/mo). Your data and settings carry over. If you choose not to subscribe, your data stays on your machine &mdash; we never delete your local files.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Which industries is Chronos best for?</h3>
+                    <p>Any professional who bills by the hour: attorneys, expert witnesses, architects, BIM managers, consultants, freelancers, and software developers. If you track billable time, Chronos can automate it.</p>
                 </div>
             </div>
         </div>
