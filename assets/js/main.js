@@ -12,6 +12,36 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Fetch latest release download URLs from chronos-releases
+var latestDownloads = null;
+var latestDownloadsPromise = fetch('https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest')
+    .then(function (res) { return res.json(); })
+    .then(function (release) {
+        var assets = release.assets || [];
+        var urls = { windows: null, macos: null, linux: null };
+        assets.forEach(function (asset) {
+            var name = asset.name;
+            if (name.match(/Setup.*\.exe$/) && !name.match(/blockmap$/)) {
+                urls.windows = asset.browser_download_url;
+            } else if (name.match(/arm64\.dmg$/) && !name.match(/blockmap$/)) {
+                urls.macos = asset.browser_download_url;
+            } else if (name.match(/\.AppImage$/)) {
+                urls.linux = asset.browser_download_url;
+            }
+        });
+        latestDownloads = urls;
+        return urls;
+    })
+    .catch(function () {
+        // Fallback to latest known release if API fails
+        latestDownloads = {
+            windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.11/Chronos.Timekeeping.Setup.0.1.11.exe',
+            macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.11/Chronos.Timekeeping-0.1.11-arm64.dmg',
+            linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.11/Chronos.Timekeeping-0.1.11.AppImage'
+        };
+        return latestDownloads;
+    });
+
 // Beta sign-up form: submit to Formspree then trigger download
 const betaForm = document.querySelector('.beta-form');
 if (betaForm) {
@@ -26,19 +56,18 @@ if (betaForm) {
         submitBtn.textContent = 'Submitting...';
         submitBtn.disabled = true;
 
-        fetch(betaForm.action, {
-            method: 'POST',
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        })
-        .then(function (response) {
+        Promise.all([
+            fetch(betaForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }),
+            latestDownloadsPromise
+        ])
+        .then(function (results) {
+            var response = results[0];
+            var downloads = results[1];
             if (response.ok) {
-                var downloads = {
-                    windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v2.0.0-beta/Chronos.Timekeeping.Setup.0.1.0.exe',
-                    macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v2.0.0-beta/Chronos.Timekeeping-0.1.0-arm64.dmg',
-                    linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v2.0.0-beta/Chronos.Timekeeping-0.1.0.AppImage'
-                };
-
                 betaForm.innerHTML =
                     '<div class="form-success">' +
                     '<h3>You\'re in!</h3>' +
