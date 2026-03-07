@@ -13,34 +13,66 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Fetch latest release download URLs from chronos-releases
+// Uses localStorage cache (1hr TTL) to avoid GitHub API rate limits
+var CACHE_KEY = 'chronos_downloads_cache';
+var CACHE_TTL = 3600000; // 1 hour
+
+function getCachedDownloads() {
+    try {
+        var raw = localStorage.getItem(CACHE_KEY);
+        if (\!raw) return null;
+        var cached = JSON.parse(raw);
+        if (Date.now() - cached.ts > CACHE_TTL) return null;
+        return cached.urls;
+    } catch (e) { return null; }
+}
+
+function setCachedDownloads(urls) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), urls: urls })); } catch (e) {}
+}
+
+var FALLBACK_DOWNLOADS = {
+    windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.13/Chronos.Timekeeping.Setup.0.1.13.exe',
+    macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.13/Chronos.Timekeeping-0.1.13-arm64.dmg',
+    linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.13/Chronos.Timekeeping-0.1.13.AppImage'
+};
+
 var latestDownloads = null;
-var latestDownloadsPromise = fetch('https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest')
-    .then(function (res) { return res.json(); })
-    .then(function (release) {
-        var assets = release.assets || [];
-        var urls = { windows: null, macos: null, linux: null };
-        assets.forEach(function (asset) {
-            var name = asset.name;
-            if (name.match(/Setup.*\.exe$/) && !name.match(/blockmap$/)) {
-                urls.windows = asset.browser_download_url;
-            } else if (name.match(/arm64\.dmg$/) && !name.match(/blockmap$/)) {
-                urls.macos = asset.browser_download_url;
-            } else if (name.match(/\.AppImage$/)) {
-                urls.linux = asset.browser_download_url;
+var latestDownloadsPromise = (function () {
+    var cached = getCachedDownloads();
+    if (cached) {
+        latestDownloads = cached;
+        return Promise.resolve(cached);
+    }
+    return fetch('https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest')
+        .then(function (res) { return res.json(); })
+        .then(function (release) {
+            var assets = release.assets || [];
+            var urls = { windows: null, macos: null, linux: null };
+            assets.forEach(function (asset) {
+                var name = asset.name;
+                if (name.match(/Setup.*\.exe$/) && \!name.match(/blockmap$/)) {
+                    urls.windows = asset.browser_download_url;
+                } else if (name.match(/arm64\.dmg$/) && \!name.match(/blockmap$/)) {
+                    urls.macos = asset.browser_download_url;
+                } else if (name.match(/\.AppImage$/)) {
+                    urls.linux = asset.browser_download_url;
+                }
+            });
+            // Only cache if we got valid URLs
+            if (urls.windows && urls.macos && urls.linux) {
+                setCachedDownloads(urls);
+                latestDownloads = urls;
+            } else {
+                latestDownloads = FALLBACK_DOWNLOADS;
             }
+            return latestDownloads;
+        })
+        .catch(function () {
+            latestDownloads = FALLBACK_DOWNLOADS;
+            return latestDownloads;
         });
-        latestDownloads = urls;
-        return urls;
-    })
-    .catch(function () {
-        // Fallback to latest known release if API fails
-        latestDownloads = {
-            windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.11/Chronos.Timekeeping.Setup.0.1.11.exe',
-            macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.11/Chronos.Timekeeping-0.1.11-arm64.dmg',
-            linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.11/Chronos.Timekeeping-0.1.11.AppImage'
-        };
-        return latestDownloads;
-    });
+}());
 
 // Beta sign-up form: submit to Formspree then trigger download
 const betaForm = document.querySelector('.beta-form');
@@ -70,7 +102,7 @@ if (betaForm) {
             if (response.ok) {
                 betaForm.innerHTML =
                     '<div class="form-success">' +
-                    '<h3>You\'re in!</h3>' +
+                    '<h3>You\'re in\!</h3>' +
                     '<p>Your download should start automatically. If it doesn\'t, click the button below.</p>' +
                     '<a href="' + downloads[platform] + '" class="btn-primary btn-submit">Download for ' +
                     platform.charAt(0).toUpperCase() + platform.slice(1) + '</a>' +
