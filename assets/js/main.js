@@ -20,7 +20,7 @@ var CACHE_TTL = 3600000; // 1 hour
 function getCachedDownloads() {
     try {
         var raw = localStorage.getItem(CACHE_KEY);
-        if (\!raw) return null;
+        if (!raw) return null;
         var cached = JSON.parse(raw);
         if (Date.now() - cached.ts > CACHE_TTL) return null;
         return cached.urls;
@@ -51,9 +51,9 @@ var latestDownloadsPromise = (function () {
             var urls = { windows: null, macos: null, linux: null };
             assets.forEach(function (asset) {
                 var name = asset.name;
-                if (name.match(/Setup.*\.exe$/) && \!name.match(/blockmap$/)) {
+                if (name.match(/Setup.*\.exe$/) && !name.match(/blockmap$/)) {
                     urls.windows = asset.browser_download_url;
-                } else if (name.match(/arm64\.dmg$/) && \!name.match(/blockmap$/)) {
+                } else if (name.match(/arm64\.dmg$/) && !name.match(/blockmap$/)) {
                     urls.macos = asset.browser_download_url;
                 } else if (name.match(/\.AppImage$/)) {
                     urls.linux = asset.browser_download_url;
@@ -102,7 +102,7 @@ if (betaForm) {
             if (response.ok) {
                 betaForm.innerHTML =
                     '<div class="form-success">' +
-                    '<h3>You\'re in\!</h3>' +
+                    '<h3>You\'re in!</h3>' +
                     '<p>Your download should start automatically. If it doesn\'t, click the button below.</p>' +
                     '<a href="' + downloads[platform] + '" class="btn-primary btn-submit">Download for ' +
                     platform.charAt(0).toUpperCase() + platform.slice(1) + '</a>' +
