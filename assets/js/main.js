@@ -32,9 +32,9 @@ function setCachedDownloads(urls) {
 }
 
 var FALLBACK_DOWNLOADS = {
-    windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.13/Chronos.Timekeeping.Setup.0.1.13.exe',
-    macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.13/Chronos.Timekeeping-0.1.13-arm64.dmg',
-    linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v0.1.13/Chronos.Timekeeping-0.1.13.AppImage'
+    windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v1.0.0/Chronos.Timekeeping.Setup.1.0.0.exe',
+    macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v1.0.0/Chronos.Timekeeping-1.0.0-arm64.dmg',
+    linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/download/v1.0.0/Chronos.Timekeeping-1.0.0.AppImage'
 };
 
 var latestDownloads = null;
