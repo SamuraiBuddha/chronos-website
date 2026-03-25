@@ -3,6 +3,10 @@ name: Send Download Links
 # Trigger manually from the Actions tab, or adapt to fire on release
 # published in the chronos-releases repo via a repository_dispatch event.
 on:
+  schedule:
+    # Every Wednesday at 9:15am Eastern (13:15 UTC during EDT / 14:15 UTC during EST)
+    # Update to 14:15 when clocks fall back in November
+    - cron: '15 13 * * 3'
   workflow_dispatch:
     inputs:
       version:
