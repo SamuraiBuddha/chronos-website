@@ -1,0 +1,84 @@
+name: Send Download Links
+
+# Trigger manually from the Actions tab, or adapt to fire on release
+# published in the chronos-releases repo via a repository_dispatch event.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release tag (e.g. v0.1.13) -- leave blank for latest'
+        required: false
+        default: ''
+      recipient:
+        description: 'Email address to send links to'
+        required: false
+        default: 'jordan@ebicinc.com'
+
+jobs:
+  send-links:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fetch release info
+        id: release
+        run: |
+          if [ -z "${{ github.event.inputs.version }}" ]; then
+            RELEASE=$(curl -s "https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest")
+          else
+            RELEASE=$(curl -s "https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/tags/${{ github.event.inputs.version }}")
+          fi
+
+          VERSION=$(echo "$RELEASE" | jq -r '.tag_name // "unknown"')
+          WIN_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("Setup.*\\.exe$")) | .browser_download_url' | head -1)
+          MAC_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("arm64\\.dmg$")) | .browser_download_url' | head -1)
+          LINUX_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("\\.AppImage$")) | .browser_download_url' | head -1)
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "win_url=$WIN_URL" >> "$GITHUB_OUTPUT"
+          echo "mac_url=$MAC_URL" >> "$GITHUB_OUTPUT"
+          echo "linux_url=$LINUX_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Print links to job summary
+        run: |
+          echo "## Chronos ${{ steps.release.outputs.version }} Download Links" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Windows:** ${{ steps.release.outputs.win_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **macOS:** ${{ steps.release.outputs.mac_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Linux:** ${{ steps.release.outputs.linux_url }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Send email with download links
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: 'Chronos ${{ steps.release.outputs.version }} -- Your Download Links'
+          to: ${{ github.event.inputs.recipient || 'jordan@ebicinc.com' }}
+          from: 'Chronos Timekeeping <${{ secrets.MAIL_USERNAME }}>'
+          html_body: |
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #2563eb;">Your Chronos Download is Ready</h2>
+              <p>Chronos Timekeeping <strong>${{ steps.release.outputs.version }}</strong> is available. Click your platform below to download:</p>
+              <div style="margin: 2rem 0;">
+                <a href="${{ steps.release.outputs.win_url }}"
+                   style="display:block; padding:1rem; margin-bottom:0.75rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
+                  Download for Windows (.exe)
+                </a>
+                <a href="${{ steps.release.outputs.mac_url }}"
+                   style="display:block; padding:1rem; margin-bottom:0.75rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
+                  Download for macOS (.dmg)
+                </a>
+                <a href="${{ steps.release.outputs.linux_url }}"
+                   style="display:block; padding:1rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
+                  Download for Linux (.AppImage)
+                </a>
+              </div>
+              <p style="color:#6b7280; font-size:0.875rem;">
+                These links point directly to the official GitHub release. If you have trouble downloading, visit
+                <a href="https://github.com/SamuraiBuddha/chronos-releases/releases">the releases page</a> directly.
+              </p>
+              <hr style="border:none; border-top:1px solid #e5e7eb; margin: 2rem 0;">
+              <p style="color:#9ca3af; font-size:0.75rem;">Chronos Timekeeping -- chronos-timekeeping.com</p>
+            </div>

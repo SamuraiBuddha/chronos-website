@@ -74,6 +74,19 @@ var latestDownloadsPromise = (function () {
         });
 }());
 
+// Wire up trial download buttons to latest release URLs
+var downloadButtons = document.querySelectorAll('.btn-download-platform');
+if (downloadButtons.length > 0) {
+    latestDownloadsPromise.then(function (downloads) {
+        downloadButtons.forEach(function (btn) {
+            var platform = btn.getAttribute('data-platform');
+            if (downloads[platform]) {
+                btn.href = downloads[platform];
+            }
+        });
+    });
+}
+
 // Beta sign-up form: submit to Formspree then trigger download
 const betaForm = document.querySelector('.beta-form');
 if (betaForm) {
@@ -100,17 +113,18 @@ if (betaForm) {
             var response = results[0];
             var downloads = results[1];
             if (response.ok) {
+                var dlUrl = downloads[platform] || FALLBACK_DOWNLOADS[platform];
                 betaForm.innerHTML =
                     '<div class="form-success">' +
                     '<h3>You\'re in!</h3>' +
                     '<p>Your download should start automatically. If it doesn\'t, click the button below.</p>' +
-                    '<a href="' + downloads[platform] + '" class="btn-primary btn-submit">Download for ' +
+                    '<a href="' + dlUrl + '" target="_blank" rel="noopener noreferrer" class="btn-primary btn-submit">Download for ' +
                     platform.charAt(0).toUpperCase() + platform.slice(1) + '</a>' +
                     '<p style="margin-top: 1rem; opacity: 0.8; font-size: 0.875rem;">We\'ll email you setup instructions and beta updates.</p>' +
                     '</div>';
 
-                if (downloads[platform]) {
-                    window.location.href = downloads[platform];
+                if (dlUrl) {
+                    window.open(dlUrl, '_blank', 'noopener,noreferrer');
                 }
             } else {
                 submitBtn.textContent = 'Something went wrong. Try again.';
