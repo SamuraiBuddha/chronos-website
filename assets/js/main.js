@@ -32,7 +32,7 @@ function setCachedDownloads(urls) {
 }
 
 var FALLBACK_DOWNLOADS = {
-    windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping.Setup.1.0.3.exe',
+    windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping.1.0.7.msi',
     macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping-1.0.3-arm64.dmg',
     linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping-1.0.3.AppImage'
 };
@@ -51,7 +51,7 @@ var latestDownloadsPromise = (function () {
             var urls = { windows: null, macos: null, linux: null };
             assets.forEach(function (asset) {
                 var name = asset.name;
-                if (name.match(/Setup.*\.exe$/) && !name.match(/blockmap$/)) {
+                if (name.match(/\.msi$/)) {
                     urls.windows = asset.browser_download_url;
                 } else if (name.match(/arm64\.dmg$/) && !name.match(/blockmap$/)) {
                     urls.macos = asset.browser_download_url;
