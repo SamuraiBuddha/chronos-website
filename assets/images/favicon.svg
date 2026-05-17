@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- TEMPUS CUMULAT · simplified favicon for ultra-small sizes (16px tray, 24px tab) -->
+  <!-- Drops fine stem detail; keeps the C-arc, T crossbar, and amber dot — the Dot & Line essence. -->
+  <path d="M 47.5 18 A 18 18 0 1 0 53 44" stroke="#1F1F1F" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <rect fill="#1F1F1F" x="20" y="20" width="24" height="6" rx="1"/>
+  <rect fill="#1F1F1F" x="29" y="28" width="6" height="22" rx="1"/>
+  <circle fill="#D97706" cx="47.5" cy="18" r="5"/>
+</svg>

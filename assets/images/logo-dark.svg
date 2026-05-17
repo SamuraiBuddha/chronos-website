@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <!-- TEMPUS CUMULAT · primary mark · dark background -->
+  <path d="M 154 61.11 A 68 68 0 1 0 178.88 154" stroke="#FAFAF7" fill="none" stroke-width="3.5" stroke-linecap="round" opacity="0.32"/>
+  <path d="M 162 47.2 A 84 84 0 1 0 192.8 162" stroke="#FAFAF7" fill="none" stroke-width="13" stroke-linecap="round"/>
+  <rect fill="#FAFAF7" x="68" y="60" width="104" height="16" rx="1.5"/>
+  <rect fill="#FAFAF7" x="99"  y="86"  width="42" height="12" rx="1"/>
+  <rect fill="#FAFAF7" x="107" y="104" width="26" height="12" rx="1"/>
+  <rect fill="#D97706" x="112" y="122" width="16" height="12" rx="1"/>
+  <rect fill="#FAFAF7" x="115" y="140" width="10" height="12" rx="1"/>
+  <rect fill="#FAFAF7" x="117" y="158" width="6"  height="12" rx="1"/>
+  <rect fill="#FAFAF7" x="118" y="176" width="4"  height="12" rx="1"/>
+  <circle fill="#D97706" cx="162" cy="47.2" r="9"/>
+</svg>
