@@ -161,3 +161,21 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+// --- Stripe subscription Payment Links -------------------------------------
+// Paste the live Payment Link URLs created in the Stripe dashboard here.
+// Buttons carry data-stripe="<key>"; any key left empty keeps its HTML href
+// fallback (the sales mailto), so checkout never lands on a dead link.
+// See docs/STRIPE-SETUP.md for how to create these links.
+var STRIPE_LINKS = {
+    proMonthly: '', // e.g. 'https://buy.stripe.com/xxxxxxxxxxxxxxxx'
+    proAnnual: ''   // e.g. 'https://buy.stripe.com/yyyyyyyyyyyyyyyy'
+};
+
+document.querySelectorAll('[data-stripe]').forEach(function (el) {
+    var url = STRIPE_LINKS[el.getAttribute('data-stripe')];
+    if (url) {
+        el.setAttribute('href', url);
+        el.setAttribute('rel', 'noopener');
+    }
+});

@@ -145,7 +145,15 @@
                         <li>Unlimited data retention</li>
                         <li>Windows, macOS, &amp; Linux</li>
                     </ul>
-                    <a href="mailto:sales@chronos-timekeeping.com?subject=Pro%20Subscription" class="btn-pricing">Get Started</a>
+                    <!-- Stripe subscription Payment Links. data-stripe keys are wired to real
+                         URLs by assets/js/main.js (STRIPE_LINKS); until configured, the href
+                         fallback keeps the button functional via sales email. -->
+                    <div class="btn-download-group">
+                        <a href="mailto:sales@chronos-timekeeping.com?subject=Pro%20Subscription%20(Monthly)"
+                           data-stripe="proMonthly" class="btn-pricing">Subscribe Monthly &mdash; $9.99</a>
+                        <a href="mailto:sales@chronos-timekeeping.com?subject=Pro%20Subscription%20(Annual)"
+                           data-stripe="proAnnual" class="btn-download-platform">Subscribe Yearly &mdash; $99.99 (save 17%)</a>
+                    </div>
                 </div>
 
                 <div class="pricing-card">
@@ -254,6 +262,6 @@
         </div>
     </footer>
 
-    <script src="assets/js/main.js?v=2"></script>
+    <script src="assets/js/main.js?v=3"></script>
 </body>
 </html>
