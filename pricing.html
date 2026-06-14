@@ -145,14 +145,29 @@
                         <li>Unlimited data retention</li>
                         <li>Windows, macOS, &amp; Linux</li>
                     </ul>
+                    <!-- Consent gate: the subscribe buttons below stay disabled until this
+                         box is checked. main.js enforces it and records the acceptance
+                         (timestamp + document versions) before allowing checkout. -->
+                    <div class="consent-gate">
+                        <label class="consent-label">
+                            <input type="checkbox" id="legal-consent" class="consent-checkbox">
+                            <span>I have read and agree to the
+                                <a href="terms.html" target="_blank" rel="noopener">Terms of Service &amp; EULA</a>,
+                                <a href="disclaimer.html" target="_blank" rel="noopener">Disclaimer</a>, and
+                                <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
+                                I understand my subscription renews automatically until I cancel.</span>
+                        </label>
+                        <p class="consent-error" id="consent-error" hidden>Please accept the Terms, Disclaimer, and Privacy Policy to continue.</p>
+                    </div>
                     <!-- Stripe subscription Payment Links. data-stripe keys are wired to real
                          URLs by assets/js/main.js (STRIPE_LINKS); until configured, the href
-                         fallback keeps the button functional via sales email. -->
+                         fallback keeps the button functional via sales email. The data-requires-consent
+                         attribute makes main.js gate the click on #legal-consent. -->
                     <div class="btn-download-group">
                         <a href="mailto:sales@chronos-timekeeping.com?subject=Pro%20Subscription%20(Monthly)"
-                           data-stripe="proMonthly" class="btn-pricing">Subscribe Monthly &mdash; $9.99</a>
+                           data-stripe="proMonthly" data-requires-consent class="btn-pricing">Subscribe Monthly &mdash; $9.99</a>
                         <a href="mailto:sales@chronos-timekeeping.com?subject=Pro%20Subscription%20(Annual)"
-                           data-stripe="proAnnual" class="btn-download-platform">Subscribe Yearly &mdash; $99.99 (save 17%)</a>
+                           data-stripe="proAnnual" data-requires-consent class="btn-download-platform">Subscribe Yearly &mdash; $99.99 (save 17%)</a>
                     </div>
                 </div>
 
@@ -252,6 +267,7 @@
                     <ul>
                         <li><a href="privacy.html">Privacy Policy</a></li>
                         <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="disclaimer.html">Disclaimer</a></li>
                     </ul>
                 </div>
             </div>

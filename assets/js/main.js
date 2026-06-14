@@ -168,8 +168,8 @@ window.addEventListener('scroll', () => {
 // fallback (the sales mailto), so checkout never lands on a dead link.
 // See docs/STRIPE-SETUP.md for how to create these links.
 var STRIPE_LINKS = {
-    proMonthly: '', // e.g. 'https://buy.stripe.com/xxxxxxxxxxxxxxxx'
-    proAnnual: ''   // e.g. 'https://buy.stripe.com/yyyyyyyyyyyyyyyy'
+    proMonthly: 'https://buy.stripe.com/4gMeVf6a6bh67qo3lpao800', // Pro $9.99/mo (live)
+    proAnnual: 'https://buy.stripe.com/3cI6oJ6a65WMfWU2hlao801'   // Pro $99.99/yr (live)
 };
 
 document.querySelectorAll('[data-stripe]').forEach(function (el) {
@@ -179,3 +179,76 @@ document.querySelectorAll('[data-stripe]').forEach(function (el) {
         el.setAttribute('rel', 'noopener');
     }
 });
+
+// --- Legal consent gate ----------------------------------------------------
+// Buttons marked [data-requires-consent] are blocked until the #legal-consent
+// checkbox is ticked. When accepted we record the event in localStorage
+// (timestamp + document versions) as a client-side trail. The AUTHORITATIVE
+// record of acceptance should also be captured at checkout -- enable
+// "Require customers to accept your terms of service" on the Stripe Payment
+// Link, which stamps consent on the Checkout Session server-side.
+(function () {
+    var LEGAL_VERSION = '2026-06-13'; // bump when terms/disclaimer/privacy change
+    var CONSENT_KEY = 'chronos_legal_consent';
+
+    var checkbox = document.getElementById('legal-consent');
+    var errorEl = document.getElementById('consent-error');
+    var gated = document.querySelectorAll('[data-requires-consent]');
+    if (!gated.length) return; // nothing to gate on this page
+
+    function setDisabled(disabled) {
+        gated.forEach(function (btn) {
+            btn.classList.toggle('btn-disabled', disabled);
+            btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+        });
+    }
+
+    function recordConsent() {
+        try {
+            localStorage.setItem(CONSENT_KEY, JSON.stringify({
+                accepted: true,
+                at: new Date().toISOString(),
+                version: LEGAL_VERSION,
+                documents: ['terms', 'disclaimer', 'privacy'],
+                page: location.pathname
+            }));
+        } catch (e) { /* storage unavailable -- gate still enforced in-session */ }
+    }
+
+    // Initialize from any prior acceptance of the current version.
+    var prior = null;
+    try { prior = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null'); } catch (e) {}
+    if (checkbox && prior && prior.accepted && prior.version === LEGAL_VERSION) {
+        checkbox.checked = true;
+    }
+    setDisabled(!(checkbox && checkbox.checked));
+
+    if (checkbox) {
+        checkbox.addEventListener('change', function () {
+            setDisabled(!checkbox.checked);
+            if (errorEl) errorEl.hidden = checkbox.checked;
+            if (checkbox.checked) recordConsent();
+        });
+    }
+
+    gated.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            if (!checkbox || !checkbox.checked) {
+                e.preventDefault();
+                if (errorEl) errorEl.hidden = false;
+                if (checkbox) {
+                    checkbox.focus();
+                    var gate = checkbox.closest('.consent-gate');
+                    if (gate) {
+                        gate.classList.remove('consent-shake');
+                        // reflow so the animation can replay on each blocked click
+                        void gate.offsetWidth;
+                        gate.classList.add('consent-shake');
+                    }
+                }
+                return;
+            }
+            recordConsent(); // refresh timestamp at the moment of checkout
+        });
+    });
+})();
