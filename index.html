@@ -574,6 +574,40 @@
         </div>
     </section>
 
+    <!-- Email Capture (not-ready-to-buy path) -->
+    <!-- Form posts to Buttondown free tier (up to 1,000 subscribers). Replace
+         YOUR_BUTTONDOWN_USERNAME below after creating the account (see
+         docs/EMAIL-CAPTURE.md). Until then the form 404s harmlessly. -->
+    <section id="newsletter" class="email-capture">
+        <style>
+            .email-capture { padding: 4rem 1rem; background: #f9fafb; text-align: center; }
+            .email-capture h2 { margin-bottom: 0.5rem; }
+            .email-capture .subtitle { color: #6b7280; margin-bottom: 1.5rem; }
+            .email-capture-form { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; max-width: 520px; margin: 0 auto; }
+            .email-capture-form input[type=email] { flex: 1 1 220px; min-width: 0; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
+            .email-capture-form input[type=email]:focus { outline: 2px solid #6366f1; border-color: #6366f1; }
+            .email-capture-form button { padding: 0.75rem 1.5rem; background: #6366f1; color: white; border: 0; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+            .email-capture-form button:hover { background: #4f46e5; }
+            .email-capture .privacy-note { margin-top: 0.75rem; font-size: 0.85rem; color: #6b7280; }
+        </style>
+        <div class="container">
+            <h2>Not Ready Yet? Stay in the Loop.</h2>
+            <p class="subtitle">Occasional updates on new features, accuracy improvements, and integrations. No spam, unsubscribe in one click.</p>
+            <form
+                class="email-capture-form"
+                action="https://buttondown.com/api/emails/embed-subscribe/YOUR_BUTTONDOWN_USERNAME"
+                method="post"
+                target="popupwindow"
+                onsubmit="window.open('https://buttondown.com/YOUR_BUTTONDOWN_USERNAME', 'popupwindow'); if (typeof plausible === 'function') { plausible('EmailCaptureSubmit', { props: { location: 'newsletter-section' } }); }"
+            >
+                <label for="bd-email" class="visually-hidden" style="position:absolute;left:-9999px;">Your email address</label>
+                <input type="email" name="email" id="bd-email" placeholder="you@firm.com" required>
+                <button type="submit">Notify Me</button>
+            </form>
+            <p class="privacy-note">Same privacy promise as the product. We never sell or share your email.</p>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section id="signup" class="final-cta">
         <div class="container">
