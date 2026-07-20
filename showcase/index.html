@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chronos -- Time, Rendered</title>
-<meta name="description" content="Design concept showcase: four particle studies of the Chronos mark.">
+<meta name="description" content="Design concept showcase: four animated studies of the Chronos mark.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="../assets/images/logo.png">
 <script>document.documentElement.className += " js";</script>
 <style>
 /* =====================================================================
    CHRONOS SHOWCASE -- "Time, Rendered"
-   Four particle studies of the Chronos mark on one stage, cycled by
-   click. The logo PNG is sampled into particles in-browser at load
-   (no bake step); every particle keeps its source pixel color.
+   Four animated studies of the Chronos mark on one stage, cycled by
+   click. The mark itself is synthesized parametrically (the art's neon
+   glow is baked into flat color, so pixel sampling cannot be crisp).
      1 THE INSTRUMENT  the mark runs as a real timepiece: the sand
        drains in exactly 60 true seconds, the hourglass flips on the
        minute, the gear advances one tooth per flip
      2 WORK BECOMES TIME  digital glyphs pour in, transmute to sand at
        the neck, and accrue into a billable-hours bar
-     3 THE SIMULACRUM  the whole logo as grains, perpetually eroding
-       and healing; the cursor is wind
-     4 THE ESCAPEMENT  a pendulum swinging on true seconds ticks the
-       gear and files every second into a minute ledger
+     3 THE DRAFT  the mark draws itself as glowing neon strokes,
+       plotter-style, then holds, fades and redrafts (no particles)
+     4 THE BOARD  a Solari split-flap clock flipping on true time,
+       solid motion-graphics shapes (no particles)
    Self-contained, no dependencies, ASCII source, reduced-motion safe.
    Demo page: noindex, unlinked. Append ?fast=1 to compress the
    60-second Instrument cycle to 8s for review.
@@ -154,11 +154,11 @@ a { color: var(--teal); }
   </div>
   <div class="stage-title">
     <h1>Time,<br><span>rendered.</span></h1>
-    <p>Four particle studies of the Chronos mark. The sand is real, the clock is true, and every grain lands somewhere billable.</p>
+    <p>Four studies of the Chronos mark. The sand is real, the clock is true, and every grain lands somewhere billable.</p>
   </div>
-  <div class="hud" id="hud">SAMPLING THE MARK</div>
+  <div class="hud" id="hud">COMPOSING THE MARK</div>
   <div class="hint" id="hint"><span class="pulse">Move to disturb</span><br>Click for next study</div>
-  <div class="loading" id="loading">SAMPLING THE MARK</div>
+  <div class="loading" id="loading">COMPOSING THE MARK</div>
   <noscript><img src="../assets/images/chronos-logo-500.png" alt="Chronos Timekeeping" style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);max-width:70vmin"></noscript>
 </section>
 
@@ -174,7 +174,7 @@ a { color: var(--teal); }
     </div>
     <div>
       <h3>The studies above</h3>
-      <p>One engine, four readings of the mark: instrument, ledger, monument, escapement.</p>
+      <p>One stage, four readings of the mark: instrument, ledger, draft, split-flap board.</p>
     </div>
     <a class="cta" href="../index.html">See Chronos</a>
   </div>
@@ -223,7 +223,7 @@ a { color: var(--teal); }
    *
    * classes: gear (ring, teeth, spokes), glass (red hourglass), sand
    * (static pixel sand for the simulacrum), text (wordmarks) */
-  var P = { gear: [], glass: [], sand: [], text: [] };
+  var P = { gear: [], glass: [] };
 
   function gearColor(y) {
     /* vertical brand gradient: pink -> violet -> teal, like the art */
@@ -237,33 +237,6 @@ a { color: var(--teal); }
       r = 150 + (63 - 150) * a2; g = 90 + (224 - 90) * a2; b = 230 + (200 - 230) * a2;
     }
     return [Math.round(r), Math.round(g), Math.round(b)];
-  }
-
-  function sampleText(img) {
-    var S = 500;
-    var oc = document.createElement("canvas");
-    oc.width = S; oc.height = S;
-    var octx = oc.getContext("2d");
-    octx.drawImage(img, 0, 0, S, S);
-    var d = octx.getImageData(0, 0, S, S).data;
-    var rOut = S * 0.31;
-    for (var y = Math.floor(S * 0.70); y < S; y += 2) {
-      for (var x = 0; x < S; x += 2) {
-        var o = (y * S + x) * 4;
-        var r = d[o], g = d[o + 1], b = d[o + 2];
-        var maxc = r > g ? (r > b ? r : b) : (g > b ? g : b);
-        if (maxc < 175) { continue; }
-        P.text.push({
-          x: (x - S * 0.5) / rOut, y: (y - S * 0.42) / rOut,
-          z: (Math.random() - 0.5) * 0.08, r: r, g: g, b: b
-        });
-      }
-    }
-    if (P.text.length > 3800) {
-      var out = [], step = P.text.length / 3800;
-      for (var i = 0; i < 3800; i++) { out.push(P.text[Math.floor(i * step)]); }
-      P.text = out;
-    }
   }
 
   function synthMark() {
@@ -320,25 +293,6 @@ a { color: var(--teal); }
       var ev = (i % 2 === 0 ? -1 : 1) * (0.475 + Math.random() * 0.05);
       redDot((i % 4 < 2 ? -1 : 1) * (0.44 + (Math.random() - 0.5) * 0.02), ev);
     }
-    /* static pixel sand for the simulacrum: a grid-snapped pile plus a
-       falling column, like the art */
-    var snap = 0.026;
-    for (i = 0; i < 330 && i < SLOTS.length; i++) {
-      P.sand.push({
-        x: Math.round(SLOTS[i][0] / snap) * snap,
-        y: Math.round(SLOTS[i][1] / snap) * snap,
-        z: (Math.random() - 0.5) * 0.05, r: 95, g: 225, b: 205
-      });
-    }
-    for (i = 0; i < 60; i++) {
-      var fv = -0.42 + Math.random() * 0.40;
-      if (Math.random() < Math.abs(fv) * 1.4) { continue; }
-      P.sand.push({
-        x: Math.round(((Math.random() - 0.5) * 0.10) / snap) * snap,
-        y: Math.round(fv / snap) * snap,
-        z: (Math.random() - 0.5) * 0.05, r: 95, g: 225, b: 205
-      });
-    }
   }
 
   /* ---------- shared stage math ---------- */
@@ -373,11 +327,13 @@ a { color: var(--teal); }
      The interior of the glass, in mark coords: two funnels meeting at
      the neck (y=0 at gear center is mid-glass). Half-width of the
      interior at height v (v negative above neck). */
-  var GL = { top: -0.475, bot: 0.475, neck: 0.028, mouth: 0.30 };
+  var GL = { top: -0.475, bot: 0.475, neck: 0.028, mouth: 0.36 };
   function glassHalfW(v) {
+    /* onion-bulb profile: swells fast off the neck, peaks mid-bulb a
+       shade wider than the mouth, tapers slightly into the frame */
     var a = Math.abs(v) / GL.bot;             /* 0 at neck, 1 at ends */
-    var w = GL.neck + (GL.mouth - GL.neck) * Math.pow(a, 1.6);
-    return Math.max(w * 0.9, GL.neck);
+    var s = Math.sin(a * Math.PI * 0.62) / Math.sin(Math.PI * 0.62);
+    return Math.max(GL.neck + (GL.mouth - GL.neck) * s, GL.neck);
   }
 
   /* build pile slots: rows packed from an apex end toward the neck.
@@ -401,7 +357,7 @@ a { color: var(--teal); }
 
   /* ---------- study registry ---------- */
 
-  var MODES = ["THE INSTRUMENT", "WORK BECOMES TIME", "THE SIMULACRUM", "THE ESCAPEMENT"];
+  var MODES = ["THE INSTRUMENT", "WORK BECOMES TIME", "THE DRAFT", "THE BOARD"];
   var mode = 0, fade = 1, fadeTo = 1, pendingMode = -1;
 
   function nextMode() {
@@ -424,11 +380,19 @@ a { color: var(--teal); }
     lastSec = sec;
     if (flipAnim < 1) { flipAnim = Math.min(1, flipAnim + dtms / 700); }
     var fe = flipAnim < 1 ? (1 - Math.pow(1 - flipAnim, 3)) : 1;
-    var rot = (flipCount + fe - 1) * Math.PI;
+    var flipping = flipAnim < 1;
+    /* THE FLIP CARRIES THE SAND. While flipping, the grains stay frozen
+       in the full end-of-cycle pile and the in-plane rotation sweeps
+       them from bottom to top; when the flip lands, rotation snaps back
+       to zero (the glass is symmetric, the snap is invisible) and the
+       new cycle finds the pile in the local UPPER slots -- exactly
+       where the rotation just delivered it. */
+    var rot = flipping ? fe * Math.PI : 0;
+    var fracDraw = flipping ? 1 : frac;
 
     /* gear: one tooth per flip, eased with the flip */
     var teeth = 12;
-    var gearA = ((flipCount + fe - 1) * (2 * Math.PI / teeth));
+    var gearA = ((flipCount - 1 + fe) * (2 * Math.PI / teeth));
     var i, s, q;
     for (i = 0; i < P.gear.length; i++) {
       s = P.gear[i];
@@ -448,12 +412,12 @@ a { color: var(--teal); }
     for (i = 0; i < NG; i++) {
       var depart = i / NG;
       var lx, ly, bright = false;
-      if (frac < depart) {
+      if (fracDraw < depart) {
         /* waiting in the upper pile: mirror of slot rank (top-first) */
         var up = SLOTS[NG - 1 - i];
         lx = up[0]; ly = -up[1];
-      } else if (frac < depart + fallT) {
-        var ft = (frac - depart) / fallT;
+      } else if (fracDraw < depart + fallT) {
+        var ft = (fracDraw - depart) / fallT;
         if (ft < 0.35) {
           var a1 = ft / 0.35;
           var up2 = SLOTS[NG - 1 - i];
@@ -472,8 +436,7 @@ a { color: var(--teal); }
         lx = dn[0] + g2 * 0.05 * (dn[1] / GL.bot); ly = dn[1];
       }
       q = stageXY(lx, ly, 0, R, cx, cy, rot);
-      var tl = 63 + Math.floor((i % 40));
-      glowDot(q[0], q[1], 90, 224 + (tl % 30), 200, (bright ? 1 : 0.8) * fade, bright ? 2.2 : 2.0);
+      glowDot(q[0], q[1], 90, 224, 200, (bright ? 1 : 0.8) * fade, bright ? 2.2 : 2.0);
     }
 
     var hh = String(now.getHours()).padStart(2, "0");
@@ -491,13 +454,13 @@ a { color: var(--teal); }
   (function () {
     for (var i = 0; i < NW; i++) {
       work.push({
-        ph: Math.random(), sp: 0.10 + Math.random() * 0.07,
+        ph: Math.random(), sp: 0.065 + Math.random() * 0.05,
         gx: (Math.random() - 0.5) * 1.7, ch: GLYPHS[i % GLYPHS.length],
         slot: -1
       });
     }
   })();
-  var pileN = 0, hours = 0;
+  var pileN = 0, pileAcc = 0, hours = 0;
 
   function drawWork(t, dtms) {
     var R = Math.min(W, H) * 0.30;
@@ -508,10 +471,12 @@ a { color: var(--teal); }
       q = stageXY(s.x, s.y, s.z, R, cx, cy, 0);
       glowDot(q[0], q[1], s.r, s.g, s.b, 0.8 * fade, 1.6);
     }
-    for (i = 0; i < P.gear.length; i += 2) {
+    /* the gear turns slowly behind the work, clearly present */
+    var gearB = REDUCED ? 0 : t * 0.045;
+    for (i = 0; i < P.gear.length; i++) {
       s = P.gear[i];
-      q = stageXY(s.x, s.y, s.z, R, cx, cy, 0);
-      dot(q[0], q[1], s.r, s.g, s.b, 0.16 * fade, 1.4);
+      q = stageXY(s.x, s.y, s.z, R, cx, cy, gearB);
+      dot(q[0], q[1], s.r, s.g, s.b, 0.40 * fade, 1.5);
     }
 
     ctx.font = "11px " + "Consolas, monospace";
@@ -523,7 +488,7 @@ a { color: var(--teal); }
       var p = wk.ph, lx, ly;
       if (p < 0.55) {          /* teal glyph converging on the mouth */
         var a = p / 0.55;
-        lx = wk.gx * (1 - a * a * 0.94);
+        lx = wk.gx * (1 - a * a * 0.94) + tiltX * 0.25 * (1 - a);
         ly = -1.05 + (1.05 + GL.top) * a;
         q = stageXY(lx, ly, 0, R, cx, cy, 0);
         ctx.fillStyle = "rgba(63,224,200," + (0.5 * fade).toFixed(2) + ")";
@@ -544,7 +509,8 @@ a { color: var(--teal); }
       }
     }
     if (!REDUCED) {
-      pileN = Math.min(NG - 1, pileN + landedThisFrame);
+      pileAcc += landedThisFrame * 0.55;   /* accrue slower than the rain */
+      if (pileAcc >= 1) { pileN = Math.min(NG - 1, pileN + Math.floor(pileAcc)); pileAcc -= Math.floor(pileAcc); }
       if (pileN >= NG - 1) { pileN = 0; hours += 1; }
     } else { pileN = Math.floor(NG * 0.6); }
     /* the accrued pile, in red */
@@ -558,145 +524,284 @@ a { color: var(--teal); }
       logged.toFixed(2) + " HRS LOGGED</span>";
   }
 
-  /* ---------- study 3: THE SIMULACRUM ---------- */
+  /* ---------- study 3: THE DRAFT ----------
+   * Not particles: the mark draws itself as continuous glowing neon
+   * strokes, plotter-style -- ring, teeth, spokes, the hourglass
+   * S-curves, pixel sand snapping in, then the wordmarks letter by
+   * letter. Holds, fades, redrafts forever. */
 
-  var sim = null;
-  function initSim() {
-    sim = [];
-    ["gear", "glass", "sand", "text"].forEach(function (cls) {
-      for (var i = 0; i < P[cls].length; i++) {
-        var s = P[cls][i];
-        sim.push({ hx: s.x, hy: s.y + (cls === "text" ? 0 : 0), z: s.z,
-                   r: s.r, g: s.g, b: s.b,
-                   x: s.x, y: s.y, vx: 0, vy: 0, st: 0, ttl: 0 });
-      }
+  var draft = null;
+  var DR_DRAW = 9, DR_HOLD = 5, DR_FADE = 1.2;
+  var draftT = 0;
+
+  function buildDraft() {
+    var items = [];
+    var i, a;
+    var C_RED = [255, 70, 70], C_TEAL = [63, 224, 200];
+    for (i = 0; i < 4; i++) {
+      var mid = -Math.PI / 2 + (i + 0.5) * (Math.PI / 2);
+      items.push({ t: "arc", c: [0, 0], r: 1, a0: -Math.PI / 2 + i * Math.PI / 2,
+                   a1: -Math.PI / 2 + (i + 1) * Math.PI / 2,
+                   col: gearColor(Math.sin(mid)), w: 2.6 });
+    }
+    for (i = 0; i < 12; i++) {
+      a = i * (Math.PI / 6);
+      var cb = Math.cos(a - 0.075), sb = Math.sin(a - 0.075);
+      var cc = Math.cos(a + 0.075), sc = Math.sin(a + 0.075);
+      items.push({ t: "line", col: gearColor(Math.sin(a)), w: 2.6, pts: [
+        [cb * 1.0, sb * 1.0], [cb * 1.15, sb * 1.15],
+        [cc * 1.15, sc * 1.15], [cc * 1.0, sc * 1.0]
+      ] });
+    }
+    for (i = 0; i < 8; i++) {
+      a = i * (Math.PI / 4) + Math.PI / 8;
+      var scol = gearColor(Math.sin(a));
+      items.push({ t: "line", w: 1,
+                   col: [Math.round(scol[0] * 0.5), Math.round(scol[1] * 0.5), Math.round(scol[2] * 0.5)],
+                   pts: [[Math.cos(a) * 0.30, Math.sin(a) * 0.30], [Math.cos(a) * 0.94, Math.sin(a) * 0.94]] });
+    }
+    items.push({ t: "line", col: C_RED, w: 2.8,
+                 pts: [[-0.46, -0.53], [0.46, -0.53], [0.46, -0.475], [-0.46, -0.475], [-0.46, -0.53]] });
+    items.push({ t: "line", col: C_RED, w: 2.8,
+                 pts: [[-0.46, 0.475], [0.46, 0.475], [0.46, 0.53], [-0.46, 0.53], [-0.46, 0.475]] });
+    var curveL = [], curveR = [];
+    for (i = 0; i <= 60; i++) {
+      var v = GL.top + (i / 60) * (GL.bot - GL.top);
+      var hw = glassHalfW(v);
+      curveL.push([-hw, v]); curveR.push([hw, v]);
+    }
+    items.push({ t: "line", col: C_RED, w: 2.8, pts: curveL });
+    items.push({ t: "line", col: C_RED, w: 2.8, pts: curveR });
+    var snap = 0.052, seen = {}, squares = 0;
+    for (i = 0; i < SLOTS.length && squares < 30; i += 6) {
+      var gx = Math.round(SLOTS[i][0] / snap), gy = Math.round(SLOTS[i][1] / snap);
+      var key = gx + "_" + gy;
+      if (seen[key]) { continue; }
+      seen[key] = 1; squares++;
+      items.push({ t: "sq", x: gx * snap, y: gy * snap, col: C_TEAL });
+    }
+    [[0, -0.06], [0.03, -0.14], [-0.04, -0.22], [0.01, -0.31], [-0.02, 0.10], [0.03, 0.19]]
+      .forEach(function (p) { items.push({ t: "sq", x: p[0], y: p[1], col: C_TEAL }); });
+    items.push({ t: "txt", s: "CHRONOS", yy: 1.52, size: 0.30, track: 0.055, col: [235, 40, 45] });
+    items.push({ t: "txt", s: "TIMEKEEPING", yy: 1.76, size: 0.105, track: 0.13, col: C_TEAL });
+
+    var total = 0;
+    items.forEach(function (it) {
+      if (it.t === "arc") { it.len = it.r * Math.abs(it.a1 - it.a0); }
+      else if (it.t === "line") {
+        var n = 0;
+        for (var j = 1; j < it.pts.length; j++) {
+          var dx = it.pts[j][0] - it.pts[j - 1][0], dy = it.pts[j][1] - it.pts[j - 1][1];
+          n += Math.sqrt(dx * dx + dy * dy);
+        }
+        it.len = n;
+      } else if (it.t === "sq") { it.len = 0.09; }
+      else { it.len = it.s.length * 0.11; }
+      total += it.len;
     });
+    return { items: items, total: total };
   }
 
-  function drawSim(t, dtms) {
-    if (!sim) { initSim(); }
-    var R = Math.min(W, H) * 0.26;
-    var cx = W * (W > 900 ? 0.62 : 0.5), cy = H * 0.40;
-    var dt = Math.min(dtms / 1000, 0.05);
-    var front = ((t * 0.05) % 1.4) - 0.7 + Math.sin(t * 0.4) * 0.05; /* erosion line sweeps */
-    var mR = 105;
-    for (var i = 0; i < sim.length; i++) {
-      var s = sim[i];
-      if (!REDUCED && s.st === 0) {
-        /* ambient erosion near the sweeping front */
-        if (Math.abs(s.hy - front) < 0.05 && Math.random() < 0.012) {
-          s.st = 1; s.ttl = 0.9 + Math.random() * 0.9;
-          s.vx = (Math.random() - 0.5) * 0.35;
-          s.vy = 0.10 + Math.random() * 0.22;
+  function drawDraft(t, dtms) {
+    if (!draft) { draft = buildDraft(); }
+    if (!REDUCED) { draftT += dtms / 1000; }
+    var phase = REDUCED ? DR_DRAW : (draftT % (DR_DRAW + DR_HOLD + DR_FADE));
+    var alpha = fade, penLen;
+    if (phase < DR_DRAW) { penLen = draft.total * (phase / DR_DRAW); }
+    else if (phase < DR_DRAW + DR_HOLD) { penLen = draft.total; }
+    else { penLen = draft.total; alpha *= 1 - (phase - DR_DRAW - DR_HOLD) / DR_FADE; }
+    if (REDUCED) { penLen = draft.total; alpha = fade; }
+
+    var R = Math.min(W, H) * 0.25;
+    var cx = W * (W > 900 ? 0.62 : 0.5) + tiltX * 26, cy = H * 0.34 + tiltY * 18;
+    function TX(p) { return [cx + p[0] * R, cy + p[1] * R]; }
+
+    var acc = 0, tip = null;
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
+    for (var i = 0; i < draft.items.length; i++) {
+      var it = draft.items[i];
+      var fr = penLen >= acc + it.len ? 1 : (penLen - acc) / it.len;
+      if (fr <= 0) { break; }
+      var cs = "rgba(" + it.col[0] + "," + it.col[1] + "," + it.col[2] + "," + alpha.toFixed(2) + ")";
+      ctx.strokeStyle = cs; ctx.fillStyle = cs;
+      ctx.shadowColor = "rgba(" + it.col[0] + "," + it.col[1] + "," + it.col[2] + ",0.8)";
+      ctx.shadowBlur = 14;
+      ctx.lineWidth = it.w || 2;
+      if (it.t === "arc") {
+        var ae = it.a0 + fr * (it.a1 - it.a0);
+        var c0 = TX(it.c);
+        ctx.beginPath(); ctx.arc(c0[0], c0[1], it.r * R, it.a0, ae); ctx.stroke();
+        tip = [c0[0] + Math.cos(ae) * it.r * R, c0[1] + Math.sin(ae) * it.r * R];
+      } else if (it.t === "line") {
+        var budget = it.len * fr;
+        var p0 = TX(it.pts[0]);
+        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); tip = p0;
+        for (var j = 1; j < it.pts.length && budget > 0; j++) {
+          var a1 = it.pts[j - 1], b1 = it.pts[j];
+          var dx = b1[0] - a1[0], dy = b1[1] - a1[1];
+          var seg = Math.sqrt(dx * dx + dy * dy);
+          var f = budget >= seg ? 1 : budget / seg;
+          tip = TX([a1[0] + dx * f, a1[1] + dy * f]);
+          ctx.lineTo(tip[0], tip[1]);
+          budget -= seg;
         }
-        /* cursor wind */
-        var q0 = stageXY(s.x, s.y, s.z, R, cx, cy, 0);
-        var mdx = q0[0] - mouse.x, mdy = q0[1] - mouse.y;
-        var md = mdx * mdx + mdy * mdy;
-        if (md < mR * mR) {
-          var f = 1 - Math.sqrt(md) / mR;
-          s.st = 1; s.ttl = 0.7 + Math.random() * 0.8;
-          s.vx = (mdx / mR) * f * 2.2 + mouse.vx * 0.02;
-          s.vy = (mdy / mR) * f * 2.2 + mouse.vy * 0.02;
+        ctx.stroke();
+      } else if (it.t === "sq") {
+        var qp = TX([it.x, it.y]);
+        var sz = 0.045 * R * Math.min(1, fr * 1.4);
+        ctx.fillRect(qp[0] - sz / 2, qp[1] - sz / 2, sz, sz);
+        tip = qp;
+      } else {
+        var chars = Math.max(0, Math.floor(fr * it.s.length));
+        ctx.font = "700 " + (it.size * R).toFixed(0) + "px -apple-system, 'Segoe UI', Arial, sans-serif";
+        var track = it.track * R, widths = [], tw = 0, kk;
+        for (kk = 0; kk < it.s.length; kk++) {
+          var wd = ctx.measureText(it.s[kk]).width + track;
+          widths.push(wd); tw += wd;
         }
+        var xx = cx - (tw - track) / 2;
+        for (kk = 0; kk < chars; kk++) {
+          ctx.fillText(it.s[kk], xx, cy + it.yy * R);
+          xx += widths[kk];
+        }
+        tip = [xx, cy + it.yy * R - it.size * R * 0.35];
       }
-      if (s.st === 1) {
-        s.x += s.vx * dt; s.y += s.vy * dt;
-        s.vy += 0.25 * dt; s.vx *= 0.985; s.vy *= 0.985;
-        s.ttl -= dt;
-        if (s.ttl <= 0) { s.st = 2; }
-      } else if (s.st === 2) {
-        var hx = s.hx - s.x, hy = s.hy - s.y;
-        s.x += hx * Math.min(dt * 3.2, 1); s.y += hy * Math.min(dt * 3.2, 1);
-        if (hx * hx + hy * hy < 0.00002) { s.x = s.hx; s.y = s.hy; s.st = 0; }
-      }
-      var q = stageXY(s.x, s.y, s.z, R, cx, cy, 0);
-      var a = s.st === 1 ? 0.95 : 0.8;
-      dot(q[0], q[1], s.r, s.g, s.b, a * fade, s.st === 1 ? 2 : 1.7);
+      acc += it.len;
+      if (fr < 1) { break; }
     }
-    hud.innerHTML = "STUDY 3/4 / <b>THE SIMULACRUM</b> / <span class=\"clk\">" +
-      sim.length.toLocaleString() + " GRAINS</span>";
+    ctx.shadowBlur = 0;
+    if (tip && phase < DR_DRAW && !REDUCED) {
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.beginPath(); ctx.arc(tip[0], tip[1], 2.6, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = "rgba(63,224,200,0.35)";
+      ctx.beginPath(); ctx.arc(tip[0], tip[1], 7, 0, 6.2832); ctx.fill();
+    }
+    hud.innerHTML = "STUDY 3/4 / <b>THE DRAFT</b> / <span class=\"clk\">NEON STROKE</span>";
   }
 
-  /* ---------- study 4: THE ESCAPEMENT ---------- */
+  /* ---------- study 4: THE BOARD ----------
+   * No particles at all: a Solari split-flap clock flipping on true
+   * time. Solid motion-graphics shapes in the brand colors, a teal
+   * seconds sweep, and twelve gear-gradient hour ticks. */
 
-  var ledger = [];   /* completed minutes this session */
-  var burst = [];    /* airborne tick grains */
-  var lastTick = -1;
+  var shown = ["", "", "", "", "", ""];
+  var flaps = [null, null, null, null, null, null];
 
-  function drawEscapement(t, dtms) {
-    var R = Math.min(W, H) * 0.22;
-    var cx = W * (W > 900 ? 0.62 : 0.5), cy = H * 0.34;
+  function rrect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function drawCard(x, y, w, h, ch, fl, col) {
+    function digitAt(d, clipHalf, scaled) {
+      ctx.save();
+      if (scaled !== 1) {
+        ctx.translate(x + w / 2, y + h / 2);
+        ctx.scale(1, Math.max(scaled, 0.02));
+        ctx.translate(-(x + w / 2), -(y + h / 2));
+      }
+      ctx.beginPath();
+      if (clipHalf === "top") { ctx.rect(x - 1, y - 1, w + 2, h / 2 + 1); }
+      else if (clipHalf === "bot") { ctx.rect(x - 1, y + h / 2, w + 2, h / 2 + 1); }
+      else { ctx.rect(x - 1, y - 1, w + 2, h + 2); }
+      ctx.clip();
+      if (scaled !== 1) {
+        ctx.fillStyle = "rgba(26,26,36," + fade.toFixed(2) + ")";
+        ctx.fillRect(x, y, w, h);
+      }
+      ctx.font = "700 " + (h * 0.66).toFixed(0) + "px Consolas, 'Segoe UI', monospace";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgba(" + col[0] + "," + col[1] + "," + col[2] + "," + fade.toFixed(2) + ")";
+      ctx.fillText(d, x + w / 2, y + h / 2 + h * 0.02);
+      ctx.restore();
+      ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    }
+    ctx.fillStyle = "rgba(21,21,29," + fade.toFixed(2) + ")";
+    ctx.strokeStyle = "rgba(62,62,78," + fade.toFixed(2) + ")";
+    ctx.lineWidth = 1;
+    rrect(x, y, w, h, 8); ctx.fill(); ctx.stroke();
+    if (!fl) {
+      digitAt(ch, null, 1);
+    } else {
+      var ph = Math.min(fl.ph, 1);
+      digitAt(fl.to, "top", 1);
+      digitAt(fl.from, "bot", 1);
+      if (ph < 0.5) { digitAt(fl.from, "top", 1 - ph * 2); }
+      else { digitAt(fl.to, "bot", ph * 2 - 1); }
+    }
+    ctx.fillStyle = "rgba(5,5,7," + (0.85 * fade).toFixed(2) + ")";
+    ctx.fillRect(x, y + h / 2 - 1, w, 2);
+  }
+
+  function drawBoard(t, dtms) {
     var now = new Date();
-    var ms = now.getTime();
-    var swing = REDUCED ? 0 : Math.cos(Math.PI * (ms % 2000) / 1000) * 0.42;
-    var tickNo = Math.floor(ms / 1000);
-    var i, s, q;
+    var str = String(now.getHours()).padStart(2, "0") +
+              String(now.getMinutes()).padStart(2, "0") +
+              String(now.getSeconds()).padStart(2, "0");
+    var cw = Math.min(W * 0.072, 100), chh = cw * 1.42, gap = cw * 0.14, pairGap = cw * 0.55;
+    var cx = W * (W > 900 ? 0.60 : 0.5), cy = H * 0.44;
+    var startX = cx - ((2 * cw + gap) * 3 + pairGap * 2) / 2 + tiltX * 22;
+    var by = cy - chh / 2 + tiltY * 14;
 
-    /* gear advances one tooth per second */
-    var tickFrac = Math.min(1, (ms % 1000) / 160);
-    var gearA = (tickNo % 12 + (1 - Math.pow(1 - tickFrac, 3))) * (2 * Math.PI / 12);
-    for (i = 0; i < P.gear.length; i++) {
-      s = P.gear[i];
-      q = stageXY(s.x, s.y, s.z, R, cx, cy, gearA);
-      glowDot(q[0], q[1], s.r, s.g, s.b, 0.8 * fade, 1.5);
+    var ringR = Math.min(W, H) * 0.345;
+    for (var tk = 0; tk < 12; tk++) {
+      var ta = tk * (Math.PI / 6) - Math.PI / 2;
+      var tc = gearColor(Math.sin(ta));
+      ctx.fillStyle = "rgba(" + tc[0] + "," + tc[1] + "," + tc[2] + "," + (0.6 * fade).toFixed(2) + ")";
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(ta) * ringR, cy + Math.sin(ta) * ringR, 3, 0, 6.2832);
+      ctx.fill();
     }
+    var sfrac = (now.getSeconds() + now.getMilliseconds() / 1000) / 60;
+    ctx.strokeStyle = "rgba(63,224,200," + (0.30 * fade).toFixed(2) + ")";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, ringR, -Math.PI / 2, -Math.PI / 2 + sfrac * 6.2832);
+    ctx.stroke();
 
-    /* pendulum: rod + bob, period 2s, tick at each extreme */
-    var ax = cx, ay = cy + R * 1.05;
-    var LR = R * 1.5;
-    var bx = ax + Math.sin(swing) * LR, by = ay + Math.cos(swing) * LR;
-    for (i = 0; i < 46; i++) {
-      var a1 = i / 45;
-      glowDot(ax + (bx - ax) * a1, ay + (by - ay) * a1, 255, 45, 120, 0.55 * fade, 1.6);
-    }
-    for (i = 0; i < 60; i++) {
-      var aa = (i / 60) * 6.2832;
-      glowDot(bx + Math.cos(aa) * R * 0.16, by + Math.sin(aa) * R * 0.16,
-              63, 224, 200, 0.85 * fade, 1.8);
-    }
+    var DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+    var MONS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    ctx.font = "12px Consolas, monospace";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(142,147,164," + (0.9 * fade).toFixed(2) + ")";
+    ctx.fillText(DAYS[now.getDay()] + "  /  " + MONS[now.getMonth()] + " " +
+      String(now.getDate()).padStart(2, "0") + " " + now.getFullYear(), cx + tiltX * 22, by - 26);
+    ctx.textAlign = "left";
 
-    if (!REDUCED && tickNo !== lastTick) {
-      lastTick = tickNo;
-      for (i = 0; i < 10; i++) {
-        burst.push({
-          x: cx + (Math.random() - 0.5) * R * 0.4, y: cy - R * 0.95,
-          vx: (Math.random() - 0.5) * 60, vy: -30 - Math.random() * 50,
-          ttl: 1.4
-        });
+    var COLS = [[255, 80, 80], [255, 80, 80], [242, 243, 247], [242, 243, 247], [63, 224, 200], [63, 224, 200]];
+    for (var i = 0; i < 6; i++) {
+      var pair = Math.floor(i / 2), din = i % 2;
+      var x = startX + pair * (2 * cw + gap + pairGap) + din * (cw + gap);
+      var target = str[i];
+      if (shown[i] === "") { shown[i] = target; }
+      if (target !== shown[i] && !flaps[i]) {
+        flaps[i] = { from: shown[i], to: target, ph: REDUCED ? 1 : 0 };
+        shown[i] = target;
       }
-      if (now.getSeconds() === 0) { ledger.push(1); if (ledger.length > 14) { ledger.shift(); } }
+      var fl = flaps[i];
+      if (fl) {
+        fl.ph += dtms / 240;
+        if (fl.ph >= 1) { flaps[i] = null; fl = null; }
+      }
+      drawCard(x, by, cw, chh, shown[i], fl, COLS[i]);
     }
-    var dt = Math.min(dtms / 1000, 0.05);
-    var ly = H * 0.80;
-    for (i = burst.length - 1; i >= 0; i--) {
-      var bp = burst[i];
-      bp.x += bp.vx * dt; bp.y += bp.vy * dt; bp.vy += 340 * dt; bp.ttl -= dt;
-      if (bp.y >= ly || bp.ttl <= 0) { burst.splice(i, 1); continue; }
-      glowDot(bp.x, bp.y, 90, 230, 205, 0.9 * fade, 2);
+    for (var pc = 0; pc < 2; pc++) {
+      var colX = startX + (pc + 1) * (2 * cw + gap) + pc * pairGap + pairGap / 2;
+      ctx.fillStyle = "rgba(142,147,164," + (0.8 * fade).toFixed(2) + ")";
+      ctx.fillRect(colX - 3, by + chh * 0.30, 6, 6);
+      ctx.fillRect(colX - 3, by + chh * 0.62, 6, 6);
     }
-
-    /* minute ledger: filled cells + the current minute filling live */
-    var cw = Math.min(26, W * 0.018), gap = 8;
-    var total = ledger.length + 1;
-    var lx0 = cx - (total * (cw + gap)) / 2;
-    for (i = 0; i < ledger.length; i++) {
-      ctx.fillStyle = "rgba(255,59,59," + (0.75 * fade).toFixed(2) + ")";
-      ctx.fillRect(lx0 + i * (cw + gap), ly - 34, cw, 34);
-    }
-    var fill = (now.getSeconds() + now.getMilliseconds() / 1000) / 60;
-    ctx.fillStyle = "rgba(63,224,200," + (0.85 * fade).toFixed(2) + ")";
-    ctx.fillRect(lx0 + ledger.length * (cw + gap), ly - 34 * fill, cw, 34 * fill);
-    ctx.strokeStyle = "rgba(142,147,164," + (0.4 * fade).toFixed(2) + ")";
-    ctx.strokeRect(lx0 + ledger.length * (cw + gap) - 0.5, ly - 34.5, cw + 1, 35);
-
-    hud.innerHTML = "STUDY 4/4 / <b>THE ESCAPEMENT</b> / <span class=\"clk\">" +
-      String(ledger.length).padStart(2, "0") + " MIN FILED</span> / 1 TOOTH PER SECOND";
+    hud.innerHTML = "STUDY 4/4 / <b>THE BOARD</b> / <span class=\"clk\">SOLARI SPLIT-FLAP</span> / LIVE";
   }
 
   /* ---------- main loop ---------- */
 
-  var DRAWERS = [drawInstrument, drawWork, drawSim, drawEscapement];
+  var DRAWERS = [drawInstrument, drawWork, drawDraft, drawBoard];
   var last = null;
 
   function frame(ts) {
@@ -710,7 +815,6 @@ a { color: var(--teal); }
     fade += (fadeTo - fade) * Math.min(dtms / 220, 1);
     if (pendingMode >= 0 && fade < 0.05) {
       mode = pendingMode; pendingMode = -1; fadeTo = 1;
-      if (mode === 2) { initSim(); }
     }
     mouse.vx *= 0.9; mouse.vy *= 0.9;
 
@@ -740,17 +844,11 @@ a { color: var(--teal); }
 
   /* ---------- boot ---------- */
 
-  var img = new Image();
-  img.onload = function () {
-    sampleText(img);
-    synthMark();
-    sizeCanvas();
-    loading.className += " done";
-    if (!FINE) { hint.innerHTML = "<span class=\"pulse\">Tap for next study</span>"; }
-    window.requestAnimationFrame(frame);
-  };
-  img.onerror = function () { loading.textContent = "COULD NOT LOAD THE MARK"; };
-  img.src = "../assets/images/chronos-logo-500.png";
+  synthMark();
+  sizeCanvas();
+  loading.className += " done";
+  if (!FINE) { hint.innerHTML = "<span class=\"pulse\">Tap for next study</span>"; }
+  window.requestAnimationFrame(frame);
 
   window.addEventListener("resize", sizeCanvas);
 })();
