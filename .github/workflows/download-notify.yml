@@ -33,9 +33,31 @@ jobs:
           fi
 
           VERSION=$(echo "$RELEASE" | jq -r '.tag_name // "unknown"')
-          WIN_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("Setup.*\\.exe$")) | .browser_download_url' | head -1)
+          # Windows ships an MSI, not a Setup .exe. This selector was test("Setup.*\.exe$")
+          # and matched ZERO assets from v1.0.4 onward, so win_url was empty and the email
+          # below rendered a Windows button with href="" -- every Wednesday, on a green run,
+          # because jq matching nothing is not an error.
+          WIN_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("\\.msi$")) | .browser_download_url' | head -1)
           MAC_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("arm64\\.dmg$")) | .browser_download_url' | head -1)
           LINUX_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("\\.AppImage$")) | .browser_download_url' | head -1)
+
+          echo "Resolved $VERSION:"
+          echo "  windows: ${WIN_URL:-<EMPTY>}"
+          echo "  macos  : ${MAC_URL:-<EMPTY>}"
+          echo "  linux  : ${LINUX_URL:-<EMPTY>}"
+
+          # Refuse to send an email containing a dead button. A missing asset means the
+          # release naming changed again, and a loud failure is the only thing that will
+          # surface that -- a silent empty href looks identical to a working run.
+          MISSING=""
+          [ -z "$WIN_URL" ]   && MISSING="$MISSING windows"
+          [ -z "$MAC_URL" ]   && MISSING="$MISSING macos"
+          [ -z "$LINUX_URL" ] && MISSING="$MISSING linux"
+          if [ -n "$MISSING" ]; then
+            echo "::error::No asset matched for:$MISSING in release $VERSION. Asset names are:"
+            echo "$RELEASE" | jq -r '.assets[].name' | sed 's/^/::error::  /'
+            exit 1
+          fi
 
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "win_url=$WIN_URL" >> "$GITHUB_OUTPUT"
@@ -68,7 +90,7 @@ jobs:
               <div style="margin: 2rem 0;">
                 <a href="${{ steps.release.outputs.win_url }}"
                    style="display:block; padding:1rem; margin-bottom:0.75rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
-                  Download for Windows (.exe)
+                  Download for Windows (.msi)
                 </a>
                 <a href="${{ steps.release.outputs.mac_url }}"
                    style="display:block; padding:1rem; margin-bottom:0.75rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
