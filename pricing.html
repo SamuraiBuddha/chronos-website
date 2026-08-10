@@ -102,16 +102,19 @@
                         <li>Full accuracy on Windows</li>
                         <li>One-click upgrade to Pro</li>
                     </ul>
+                    <!-- Fallback hrefs are the releases PAGE on purpose. main.js rewrites these
+                         from the GitHub API; a versioned filename here 404s as soon as the next
+                         release ships (these were dead from v1.0.15 to v1.0.20). -->
                     <div class="btn-download-group">
-                        <a href="https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping.1.0.14.msi"
+                        <a href="https://github.com/SamuraiBuddha/chronos-releases/releases/latest"
                            class="btn-download-platform" data-platform="windows">
                             Download for Windows
                         </a>
-                        <a href="https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping-1.0.14-arm64.dmg"
+                        <a href="https://github.com/SamuraiBuddha/chronos-releases/releases/latest"
                            class="btn-download-platform" data-platform="macos">
                             Download for macOS
                         </a>
-                        <a href="https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping-1.0.14.AppImage"
+                        <a href="https://github.com/SamuraiBuddha/chronos-releases/releases/latest"
                            class="btn-download-platform" data-platform="linux">
                             Download for Linux
                         </a>
@@ -168,6 +171,9 @@
                          URLs by assets/js/main.js (STRIPE_LINKS); until configured, the href
                          fallback keeps the button functional via sales email. The data-requires-consent
                          attribute makes main.js gate the click on #legal-consent. -->
+                    <!-- Fallback hrefs are the releases PAGE on purpose. main.js rewrites these
+                         from the GitHub API; a versioned filename here 404s as soon as the next
+                         release ships (these were dead from v1.0.15 to v1.0.20). -->
                     <div class="btn-download-group">
                         <a href="mailto:sales@chronos-timekeeping.com?subject=Pro%20Subscription%20(Monthly)"
                            data-stripe="proMonthly" data-requires-consent class="btn-pricing">Subscribe Monthly &mdash; $9.99</a>

@@ -31,10 +31,21 @@ function setCachedDownloads(urls) {
     try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), urls: urls })); } catch (e) {}
 }
 
+// DO NOT put a versioned filename here. GitHub's /releases/latest/download/<name>
+// route only resolves when that EXACT filename exists in the newest release, so a
+// pinned name 404s the moment the next version ships. These were pinned to 1.0.14
+// and had been dead since v1.0.15 (2026-07-01) -- silently, because the happy path
+// below rewrites the hrefs from the API and nobody exercises the fallback.
+//
+// The releases page always resolves regardless of version, so it cannot rot. It is
+// one extra click, which is the correct trade for a link that is only reached when
+// the API call fails (unauthenticated rate limit, offline, or JS blocked).
+var RELEASES_PAGE = 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest';
+
 var FALLBACK_DOWNLOADS = {
-    windows: 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping.1.0.14.msi',
-    macos: 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping-1.0.14-arm64.dmg',
-    linux: 'https://github.com/SamuraiBuddha/chronos-releases/releases/latest/download/Chronos.Timekeeping-1.0.14.AppImage'
+    windows: RELEASES_PAGE,
+    macos: RELEASES_PAGE,
+    linux: RELEASES_PAGE
 };
 
 var latestDownloads = null;
