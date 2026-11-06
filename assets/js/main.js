@@ -70,16 +70,29 @@ var latestDownloadsPromise = (function () {
                     urls.linux = asset.browser_download_url;
                 }
             });
-            // Only cache if we got valid URLs
-            if (urls.windows && urls.macos && urls.linux) {
-                setCachedDownloads(urls);
-                latestDownloads = urls;
-            } else {
-                latestDownloads = FALLBACK_DOWNLOADS;
+            // Per platform, never all-or-nothing. v1.2.0 shipped without a macOS
+            // build, and the old "windows && macos && linux" check sent EVERY button
+            // (Windows and Linux too) to the releases page instead of the file.
+            // A platform missing from the release falls back alone, loudly.
+            var missing = [];
+            Object.keys(urls).forEach(function (platform) {
+                if (!urls[platform]) {
+                    missing.push(platform);
+                    urls[platform] = RELEASES_PAGE;
+                }
+            });
+            if (missing.length) {
+                console.warn('[downloads] release ' + release.tag_name + ' has no asset for: ' +
+                    missing.join(', ') + ' -- those buttons open the releases page');
             }
+            if (missing.length < 3) {
+                setCachedDownloads(urls);
+            }
+            latestDownloads = urls;
             return latestDownloads;
         })
-        .catch(function () {
+        .catch(function (err) {
+            console.warn('[downloads] GitHub release lookup failed, all buttons open the releases page: ' + err);
             latestDownloads = FALLBACK_DOWNLOADS;
             return latestDownloads;
         });
