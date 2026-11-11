@@ -2,7 +2,13 @@
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const href = this.getAttribute('href');
+        if (href === '#') {
+            // A bare "#" (the logo) is not a valid selector -- querySelector('#') throws.
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+        const target = document.querySelector(href);
         if (target) {
             target.scrollIntoView({
                 behavior: 'smooth',
@@ -24,11 +30,18 @@ function getCachedDownloads() {
         var cached = JSON.parse(raw);
         if (Date.now() - cached.ts > CACHE_TTL) return null;
         return cached.urls;
-    } catch (e) { return null; }
+    } catch (e) {
+        console.warn('[downloads] could not read the download cache (ignoring it): ' + e);
+        return null;
+    }
 }
 
 function setCachedDownloads(urls) {
-    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), urls: urls })); } catch (e) {}
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), urls: urls }));
+    } catch (e) {
+        console.warn('[downloads] could not write the download cache: ' + e);
+    }
 }
 
 // DO NOT put a versioned filename here. GitHub's /releases/latest/download/<name>
@@ -56,7 +69,14 @@ var latestDownloadsPromise = (function () {
         return Promise.resolve(cached);
     }
     return fetch('https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest')
-        .then(function (res) { return res.json(); })
+        .then(function (res) {
+            if (!res.ok) {
+                // e.g. 403 rate limit. Without this the JSON error body parses fine and
+                // is misreported as "release has no asset for every platform".
+                throw new Error('GitHub API responded HTTP ' + res.status);
+            }
+            return res.json();
+        })
         .then(function (release) {
             var assets = release.assets || [];
             var urls = { windows: null, macos: null, linux: null };
@@ -107,59 +127,6 @@ if (downloadButtons.length > 0) {
             if (downloads[platform]) {
                 btn.href = downloads[platform];
             }
-        });
-    });
-}
-
-// Beta sign-up form: submit to Formspree then trigger download
-const betaForm = document.querySelector('.beta-form');
-if (betaForm) {
-    betaForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const formData = new FormData(betaForm);
-        const platform = formData.get('platform');
-        const submitBtn = betaForm.querySelector('.btn-submit');
-        const originalText = submitBtn.textContent;
-
-        submitBtn.textContent = 'Submitting...';
-        submitBtn.disabled = true;
-
-        Promise.all([
-            fetch(betaForm.action, {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            }),
-            latestDownloadsPromise
-        ])
-        .then(function (results) {
-            var response = results[0];
-            var downloads = results[1];
-            if (response.ok) {
-                var dlUrl = downloads[platform] || FALLBACK_DOWNLOADS[platform];
-                betaForm.innerHTML =
-                    '<div class="form-success">' +
-                    '<h3>You\'re in!</h3>' +
-                    '<p>Your download should start automatically. If it doesn\'t, click the button below.</p>' +
-                    '<a href="' + dlUrl + '" target="_blank" rel="noopener noreferrer" class="btn-primary btn-submit">Download for ' +
-                    platform.charAt(0).toUpperCase() + platform.slice(1) + '</a>' +
-                    '<p style="margin-top: 1rem; opacity: 0.8; font-size: 0.875rem;">We\'ll email you setup instructions and beta updates.</p>' +
-                    '</div>';
-
-                if (dlUrl) {
-                    window.open(dlUrl, '_blank', 'noopener,noreferrer');
-                }
-            } else {
-                submitBtn.textContent = 'Something went wrong. Try again.';
-                submitBtn.disabled = false;
-                setTimeout(function () { submitBtn.textContent = originalText; }, 3000);
-            }
-        })
-        .catch(function () {
-            submitBtn.textContent = 'Network error. Try again.';
-            submitBtn.disabled = false;
-            setTimeout(function () { submitBtn.textContent = originalText; }, 3000);
         });
     });
 }
@@ -236,12 +203,19 @@ document.querySelectorAll('[data-stripe]').forEach(function (el) {
                 documents: ['terms', 'disclaimer', 'privacy'],
                 page: location.pathname
             }));
-        } catch (e) { /* storage unavailable -- gate still enforced in-session */ }
+        } catch (e) {
+            // Storage unavailable: the gate is still enforced in-session, only the trail is lost.
+            console.warn('[consent] could not record consent to localStorage: ' + e);
+        }
     }
 
     // Initialize from any prior acceptance of the current version.
     var prior = null;
-    try { prior = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null'); } catch (e) {}
+    try {
+        prior = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null');
+    } catch (e) {
+        console.warn('[consent] could not read prior consent from localStorage (treating as none): ' + e);
+    }
     if (checkbox && prior && prior.accepted && prior.version === LEGAL_VERSION) {
         checkbox.checked = true;
     }
