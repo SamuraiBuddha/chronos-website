@@ -1,12 +1,12 @@
 name: Send Download Links
 
-# Trigger manually from the Actions tab, or adapt to fire on release
-# published in the chronos-releases repo via a repository_dispatch event.
+# Runs weekly on a schedule, or manually from the Actions tab (workflow_dispatch).
+# There is no repository_dispatch trigger: nothing in chronos-releases fires one.
 on:
   schedule:
-    # Every Wednesday at 9:15am Eastern (13:15 UTC during EDT / 14:15 UTC during EST)
-    # Update to 14:15 when clocks fall back in November
-    - cron: '15 13 * * 3'
+    # Wednesdays at 14:15 UTC = 9:15am EST (winter) / 10:15am EDT (summer).
+    # GitHub cron is always UTC, so this never needs editing when clocks change.
+    - cron: '15 14 * * 3'
   workflow_dispatch:
     inputs:
       version:
@@ -23,54 +23,86 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fetch release info
+      - name: Fetch release info and build the email
         id: release
+        env:
+          # Passed through env, never interpolated into the script text: a crafted
+          # tag input would otherwise execute as shell.
+          INPUT_VERSION: ${{ github.event.inputs.version }}
         run: |
-          if [ -z "${{ github.event.inputs.version }}" ]; then
-            RELEASE=$(curl -s "https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest")
+          if [ -z "$INPUT_VERSION" ]; then
+            URL="https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest"
           else
-            RELEASE=$(curl -s "https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/tags/${{ github.event.inputs.version }}")
+            URL="https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/tags/$INPUT_VERSION"
           fi
+          RELEASE=$(curl -sS "$URL")
 
           VERSION=$(echo "$RELEASE" | jq -r '.tag_name // "unknown"')
           # Windows ships an MSI, not a Setup .exe. This selector was test("Setup.*\.exe$")
           # and matched ZERO assets from v1.0.4 onward, so win_url was empty and the email
           # below rendered a Windows button with href="" -- every Wednesday, on a green run,
           # because jq matching nothing is not an error.
-          WIN_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("\\.msi$")) | .browser_download_url' | head -1)
-          MAC_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("arm64\\.dmg$")) | .browser_download_url' | head -1)
-          LINUX_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | test("\\.AppImage$")) | .browser_download_url' | head -1)
+          # `.assets[]?` so an API error body (no .assets) yields empty, not a jq crash.
+          WIN_URL=$(echo "$RELEASE" | jq -r '.assets[]? | select(.name | test("\\.msi$")) | .browser_download_url' | head -1)
+          MAC_URL=$(echo "$RELEASE" | jq -r '.assets[]? | select(.name | test("arm64\\.dmg$")) | .browser_download_url' | head -1)
+          LINUX_URL=$(echo "$RELEASE" | jq -r '.assets[]? | select(.name | test("\\.AppImage$")) | .browser_download_url' | head -1)
 
           echo "Resolved $VERSION:"
           echo "  windows: ${WIN_URL:-<EMPTY>}"
           echo "  macos  : ${MAC_URL:-<EMPTY>}"
           echo "  linux  : ${LINUX_URL:-<EMPTY>}"
 
-          # Refuse to send an email containing a dead button. A missing asset means the
-          # release naming changed again, and a loud failure is the only thing that will
-          # surface that -- a silent empty href looks identical to a working run.
-          MISSING=""
-          [ -z "$WIN_URL" ]   && MISSING="$MISSING windows"
-          [ -z "$MAC_URL" ]   && MISSING="$MISSING macos"
-          [ -z "$LINUX_URL" ] && MISSING="$MISSING linux"
-          if [ -n "$MISSING" ]; then
-            echo "::error::No asset matched for:$MISSING in release $VERSION. Asset names are:"
-            echo "$RELEASE" | jq -r '.assets[].name' | sed 's/^/::error::  /'
+          # A platform that is missing from the release is announced as such in the
+          # email (v1.2.0 shipped without a macOS build). The send only fails when NO
+          # installer matched at all: that means the asset naming changed or the API
+          # call failed, and a loud failure is the only thing that will surface it.
+          if [ -z "$WIN_URL" ] && [ -z "$MAC_URL" ] && [ -z "$LINUX_URL" ]; then
+            echo "::error::No installer asset matched in release $VERSION. API response says:"
+            echo "$RELEASE" | jq -r '.message // empty' | sed 's/^/::error::  message: /'
+            echo "$RELEASE" | jq -r '.assets[]?.name' | sed 's/^/::error::  asset: /'
             exit 1
           fi
+
+          # Build the email body here so each button exists only if its asset does.
+          EMAIL="$GITHUB_WORKSPACE/download-email.html"
+          button() {
+            printf '<a href="%s" style="display:block; padding:1rem; margin-bottom:0.75rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">%s</a>\n' "$1" "$2"
+          }
+          {
+            echo '<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">'
+            echo '<h2 style="color: #2563eb;">Your Chronos Download is Ready</h2>'
+            echo "<p>Chronos Timekeeping <strong>$VERSION</strong> is available. Click your platform below to download:</p>"
+            echo '<div style="margin: 2rem 0;">'
+            [ -n "$WIN_URL" ]   && button "$WIN_URL" 'Download for Windows (.msi)'
+            [ -n "$MAC_URL" ]   && button "$MAC_URL" 'Download for macOS (.dmg)'
+            [ -n "$LINUX_URL" ] && button "$LINUX_URL" 'Download for Linux (.AppImage)'
+            echo '</div>'
+            [ -z "$WIN_URL" ]   && echo '<p style="color:#b45309;"><strong>The Windows build is temporarily unavailable for this release.</strong> It will be added as soon as it is rebuilt.</p>'
+            [ -z "$MAC_URL" ]   && echo '<p style="color:#b45309;"><strong>The macOS build is temporarily unavailable for this release.</strong> It will be added as soon as it is rebuilt.</p>'
+            [ -z "$LINUX_URL" ] && echo '<p style="color:#b45309;"><strong>The Linux build is temporarily unavailable for this release.</strong> It will be added as soon as it is rebuilt.</p>'
+            echo '<p style="color:#6b7280; font-size:0.875rem;">'
+            echo 'These links point directly to the official GitHub release. If you have trouble downloading, visit'
+            echo '<a href="https://github.com/SamuraiBuddha/chronos-releases/releases">the releases page</a> directly.'
+            echo '</p>'
+            echo '<hr style="border:none; border-top:1px solid #e5e7eb; margin: 2rem 0;">'
+            echo '<p style="color:#9ca3af; font-size:0.75rem;">Chronos Timekeeping -- chronos-timekeeping.com</p>'
+            echo '</div>'
+          } > "$EMAIL"
+          echo "Wrote $(wc -c < "$EMAIL") bytes of email HTML to $EMAIL"
 
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "win_url=$WIN_URL" >> "$GITHUB_OUTPUT"
           echo "mac_url=$MAC_URL" >> "$GITHUB_OUTPUT"
           echo "linux_url=$LINUX_URL" >> "$GITHUB_OUTPUT"
+          echo "email_file=$EMAIL" >> "$GITHUB_OUTPUT"
 
       - name: Print links to job summary
         run: |
           echo "## Chronos ${{ steps.release.outputs.version }} Download Links" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Windows:** ${{ steps.release.outputs.win_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **macOS:** ${{ steps.release.outputs.mac_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Linux:** ${{ steps.release.outputs.linux_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Windows:** ${{ steps.release.outputs.win_url || 'not in this release' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **macOS:** ${{ steps.release.outputs.mac_url || 'not in this release' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Linux:** ${{ steps.release.outputs.linux_url || 'not in this release' }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Send email with download links
         uses: dawidd6/action-send-mail@v3
@@ -83,28 +115,4 @@ jobs:
           subject: 'Chronos ${{ steps.release.outputs.version }} -- Your Download Links'
           to: ${{ github.event.inputs.recipient || 'jordan@ebicinc.com' }}
           from: 'Chronos Timekeeping <${{ secrets.MAIL_USERNAME }}>'
-          html_body: |
-            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #2563eb;">Your Chronos Download is Ready</h2>
-              <p>Chronos Timekeeping <strong>${{ steps.release.outputs.version }}</strong> is available. Click your platform below to download:</p>
-              <div style="margin: 2rem 0;">
-                <a href="${{ steps.release.outputs.win_url }}"
-                   style="display:block; padding:1rem; margin-bottom:0.75rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
-                  Download for Windows (.msi)
-                </a>
-                <a href="${{ steps.release.outputs.mac_url }}"
-                   style="display:block; padding:1rem; margin-bottom:0.75rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
-                  Download for macOS (.dmg)
-                </a>
-                <a href="${{ steps.release.outputs.linux_url }}"
-                   style="display:block; padding:1rem; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; text-align:center;">
-                  Download for Linux (.AppImage)
-                </a>
-              </div>
-              <p style="color:#6b7280; font-size:0.875rem;">
-                These links point directly to the official GitHub release. If you have trouble downloading, visit
-                <a href="https://github.com/SamuraiBuddha/chronos-releases/releases">the releases page</a> directly.
-              </p>
-              <hr style="border:none; border-top:1px solid #e5e7eb; margin: 2rem 0;">
-              <p style="color:#9ca3af; font-size:0.75rem;">Chronos Timekeeping -- chronos-timekeeping.com</p>
-            </div>
+          html_body: file://${{ steps.release.outputs.email_file }}
