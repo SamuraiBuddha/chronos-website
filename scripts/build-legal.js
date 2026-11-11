@@ -244,6 +244,16 @@ function page({ title, bodyHtml, slug }) {
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://chronos-timekeeping.com/${slug}.html">
     <meta name="theme-color" content="#6366f1">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chronos-timekeeping.com/${slug}.html">
+    <meta property="og:title" content="${title} - Chronos Timekeeping">
+    <meta property="og:description" content="${title} for Chronos Timekeeping automatic time tracking software.">
+    <meta property="og:image" content="https://chronos-timekeeping.com/assets/images/og-image.png">
+    <meta property="og:site_name" content="Chronos Timekeeping">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${title} - Chronos Timekeeping">
+    <meta name="twitter:description" content="${title} for Chronos Timekeeping automatic time tracking software.">
+    <meta name="twitter:image" content="https://chronos-timekeeping.com/assets/images/og-image.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/logo.png">
     <link rel="stylesheet" href="assets/css/styles.css">
