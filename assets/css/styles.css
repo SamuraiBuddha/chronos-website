@@ -436,6 +436,17 @@ body {
     border-color: var(--primary-color);
 }
 
+/* Set by main.js when the latest release has no build for that platform. */
+.btn-download-platform.btn-unavailable,
+.btn-download-platform.btn-unavailable:hover {
+    background: var(--bg-light);
+    color: var(--text-light);
+    border-color: var(--border-color);
+    border-style: dashed;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .pricing-card.trial h3 {
     color: var(--text-dark);
 }

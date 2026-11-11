@@ -20,7 +20,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Fetch latest release download URLs from chronos-releases
 // Uses localStorage cache (1hr TTL) to avoid GitHub API rate limits
-var CACHE_KEY = 'chronos_downloads_cache';
+// v2: the cache now stores { urls, missing } (v1 stored urls only, which cannot say
+// which platforms had no asset, so old entries are ignored by the key change).
+var CACHE_KEY = 'chronos_downloads_cache_v2';
 var CACHE_TTL = 3600000; // 1 hour
 
 function getCachedDownloads() {
@@ -29,16 +31,17 @@ function getCachedDownloads() {
         if (!raw) return null;
         var cached = JSON.parse(raw);
         if (Date.now() - cached.ts > CACHE_TTL) return null;
-        return cached.urls;
+        if (!cached.urls || !Array.isArray(cached.missing)) return null;
+        return { urls: cached.urls, missing: cached.missing };
     } catch (e) {
         console.warn('[downloads] could not read the download cache (ignoring it): ' + e);
         return null;
     }
 }
 
-function setCachedDownloads(urls) {
+function setCachedDownloads(urls, missing) {
     try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), urls: urls }));
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), urls: urls, missing: missing }));
     } catch (e) {
         console.warn('[downloads] could not write the download cache: ' + e);
     }
@@ -61,11 +64,15 @@ var FALLBACK_DOWNLOADS = {
     linux: RELEASES_PAGE
 };
 
+// Resolves to { urls: {windows, macos, linux}, missing: [platform, ...] }.
+// `missing` lists platforms the latest release really has no asset for. It is EMPTY
+// when the lookup itself failed (rate limit, offline): then we do not know, so no
+// button is declared unavailable -- every one just opens the releases page.
 var latestDownloads = null;
 var latestDownloadsPromise = (function () {
     var cached = getCachedDownloads();
     if (cached) {
-        latestDownloads = cached;
+        latestDownloads = cached.urls;
         return Promise.resolve(cached);
     }
     return fetch('https://api.github.com/repos/SamuraiBuddha/chronos-releases/releases/latest')
@@ -105,29 +112,58 @@ var latestDownloadsPromise = (function () {
                 console.warn('[downloads] release ' + release.tag_name + ' has no asset for: ' +
                     missing.join(', ') + ' -- those buttons open the releases page');
             }
-            if (missing.length < 3) {
-                setCachedDownloads(urls);
+            // All three missing means the release exists but has no usable assets
+            // (still uploading, or the asset naming changed). That is not a
+            // per-platform outage, so do not declare any platform unavailable.
+            if (missing.length === 3) {
+                console.warn('[downloads] release ' + release.tag_name + ' matched no installer assets at all');
+                missing = [];
+            } else {
+                setCachedDownloads(urls, missing);
             }
             latestDownloads = urls;
-            return latestDownloads;
+            return { urls: urls, missing: missing };
         })
         .catch(function (err) {
             console.warn('[downloads] GitHub release lookup failed, all buttons open the releases page: ' + err);
             latestDownloads = FALLBACK_DOWNLOADS;
-            return latestDownloads;
+            return { urls: FALLBACK_DOWNLOADS, missing: [] };
         });
 }());
 
+// Mark a download button as unavailable: visibly disabled, announced as disabled,
+// and with no href so it cannot navigate anywhere.
+var UNAVAILABLE_TEXT = {
+    macos: 'macOS build coming back soon'
+};
+
+function markUnavailable(btn, platform) {
+    btn.removeAttribute('href');
+    btn.setAttribute('aria-disabled', 'true');
+    btn.setAttribute('tabindex', '-1');
+    btn.classList.add('btn-unavailable');
+    btn.textContent = UNAVAILABLE_TEXT[platform] || (platform + ' build coming back soon');
+    btn.addEventListener('click', function (e) { e.preventDefault(); });
+}
+
 // Wire up trial download buttons to latest release URLs
+function applyDownloads(buttons, result) {
+    buttons.forEach(function (btn) {
+        var platform = btn.getAttribute('data-platform');
+        if (!platform) return;
+        if (result.missing.indexOf(platform) !== -1) {
+            console.warn('[downloads] no ' + platform + ' asset in the latest release -- button disabled');
+            markUnavailable(btn, platform);
+        } else if (result.urls[platform]) {
+            btn.href = result.urls[platform];
+        }
+    });
+}
+
 var downloadButtons = document.querySelectorAll('.btn-download-platform');
 if (downloadButtons.length > 0) {
-    latestDownloadsPromise.then(function (downloads) {
-        downloadButtons.forEach(function (btn) {
-            var platform = btn.getAttribute('data-platform');
-            if (downloads[platform]) {
-                btn.href = downloads[platform];
-            }
-        });
+    latestDownloadsPromise.then(function (result) {
+        applyDownloads(downloadButtons, result);
     });
 }
 
