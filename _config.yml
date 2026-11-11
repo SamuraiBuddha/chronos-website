@@ -1,0 +1,26 @@
+# Jekyll config for the GitHub Pages build of this static site.
+#
+# The only job here is to stop repo-internal material from being published at
+# https://chronos-timekeeping.com/... (docs/STRIPE-SETUP.md carries Stripe test
+# product/price ids; demo/*.mjs are recording drivers; legal/*.md are the sources
+# that scripts/build-legal.js turns into the real pages).
+#
+# Every path below was grepped against all tracked HTML/JS/CSS before being
+# excluded: no page links, loads or fetches any of them (only code comments
+# mention docs/STRIPE-SETUP.md and demo/HERO-STORYBOARD.md). The images under
+# demo/ (title-card.png etc.) are referenced by pages and are deliberately NOT
+# excluded. Dot-directories such as .github are never published by Jekyll.
+#
+# Explicit paths rather than globs, so the result does not depend on glob
+# semantics. New files under demo/ must be added here if they are not site assets.
+exclude:
+  - docs
+  - scripts
+  - legal
+  - demo/HERO-STORYBOARD.md
+  - demo/record-demo.md
+  - demo/voiceover-script.md
+  - demo/chronos-driver.mjs
+  - demo/test-cdp.mjs
+  - ADVISORY.md
+  - README.md
