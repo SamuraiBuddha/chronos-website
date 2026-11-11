@@ -212,8 +212,8 @@
            hero-demo.webm   -- same content, VP9 (smaller file, better quality)
            hero-demo.gif    -- fallback for crawlers / RSS / unfurls (optional)
            hero-demo-poster.png  -- first-frame poster (shown while loading)
-         The <video> element below will render the new files automatically.
-         Until then, the poster shows the existing title-card.png. -->
+         Until then the slot shows title-card.png as a plain image (see the
+         restore note inside the frame below). -->
     <section id="hero-demo" class="hero-demo">
         <style>
             .hero-demo { padding: 1rem 1rem 3rem; background: linear-gradient(180deg, transparent 0%, #f9fafb 100%); }
@@ -223,16 +223,17 @@
         </style>
         <div class="container">
             <div class="hero-demo-frame">
-                <video
-                    autoplay muted loop playsinline preload="metadata"
-                    poster="demo/title-card.png"
-                    aria-label="30-second product demo loop">
-                    <source src="assets/demo/hero-demo.webm" type="video/webm">
-                    <source src="assets/demo/hero-demo.mp4" type="video/mp4">
-                    <img src="demo/title-card.png" alt="Chronos Timekeeping demo (loading)">
-                </video>
+                <!-- To restore the video: record the demo, add assets/demo/hero-demo.mp4 and
+                     hero-demo.webm, then replace the <img> below with:
+                       <video autoplay muted loop playsinline preload="metadata"
+                              poster="demo/title-card.png" aria-label="30-second product demo loop">
+                         <source src="assets/demo/hero-demo.webm" type="video/webm">
+                         <source src="assets/demo/hero-demo.mp4" type="video/mp4">
+                       </video>
+                     and change the caption below back to describe the video. -->
+                <img src="demo/title-card.png" alt="Chronos Timekeeping demo (loading)">
             </div>
-            <p class="hero-demo-caption">Three files, three projects, zero clicks. Watch handle enumeration classify each one in real time.</p>
+            <p class="hero-demo-caption">Three files, three projects, zero clicks: handle enumeration classifies each one automatically.</p>
         </div>
     </section>
 
