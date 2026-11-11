@@ -1,4 +1,4 @@
-# Chronos Timekeeping — Privacy Policy
+# Chronos Timekeeping -- Privacy Policy
 
 **Effective Date:** June 13, 2026
 **Last Updated:** June 13, 2026
@@ -14,9 +14,9 @@ EULA.
 
 ## 1. Privacy-First, Local-First Design
 
-Chronos is designed to keep your activity data **on your own device.** Time Data — including
+Chronos is designed to keep your activity data **on your own device.** Time Data -- including
 file-path metadata, window/process information, project classifications, timestamps, and
-durations — is stored locally in an encrypted database (AES-256-GCM) on your machine. **We do
+durations -- is stored locally in an encrypted database (AES-256-GCM) on your machine. **We do
 not collect the contents of your files;** Chronos records metadata (such as file paths and
 durations) used to classify time, not document contents.
 
@@ -24,17 +24,17 @@ durations) used to classify time, not document contents.
 
 **(a) Information you provide:**
 - Account and contact details (name, email) when you register, purchase, or contact support.
-- Billing information processed by Stripe (see Section 4) — we do **not** receive or store
+- Billing information processed by Stripe (see Section 4) -- we do **not** receive or store
   your full payment-card number.
 - Communications you send us (support requests, feedback).
 
 **(b) Information collected automatically:**
 - **Local activity data (Time Data)** generated on your device, stored locally as described
   above. This stays on your device unless you explicitly export, sync, or transmit it.
-- **Telemetry / diagnostic data** — limited operational, crash, version, and feature-usage
+- **Telemetry / diagnostic data** -- limited operational, crash, version, and feature-usage
   data, where enabled, used to maintain and improve the Service. You may be able to disable
   telemetry in settings where offered.
-- **Website data** — standard log data (IP address, browser type, pages visited) and cookies
+- **Website data** -- standard log data (IP address, browser type, pages visited) and cookies
   or similar technologies used to operate the site and measure traffic.
 
 **(c) Information from third parties:**
@@ -57,10 +57,10 @@ make a purchase, your payment details are collected and processed by Stripe unde
 privacy policy and terms. We receive transaction metadata (such as confirmation, amount, and
 subscription status) but not your full card number. See https://stripe.com/privacy.
 
-## 5. Monitored Persons — Customer as Controller
+## 5. Monitored Persons -- Customer as Controller
 
 If you use Chronos to monitor, record, or classify the activity or files of any person other
-than yourself ("Monitored Persons" — e.g., employees or contractors), **you are the data
+than yourself ("Monitored Persons" -- e.g., employees or contractors), **you are the data
 controller for that data, and you are responsible** for providing required notices, obtaining
 required consents, and complying with all applicable monitoring, wiretap, employment, and
 privacy laws. We process such data, if at all, only as a service provider/processor acting on
@@ -130,7 +130,7 @@ take effect constitutes acceptance.
 
 ## 14. Contact
 
-Privacy questions or requests: **legal@chronos-timekeeping.com** ·
+Privacy questions or requests: **legal@chronos-timekeeping.com** &middot;
 **https://chronos-timekeeping.com**
 
 ---

@@ -21,17 +21,17 @@ validates license keys.
 
 ## Provisioned resources (TEST MODE)
 
-Created on the ChronosTimekeeping Stripe account. These are **test-mode** — do
+Created on the ChronosTimekeeping Stripe account. These are **test-mode** -- do
 not paste the test Payment Links onto the live site; recreate them in live mode
 before launch (same commands, live keys).
 
 | Resource | ID / URL |
 |---|---|
 | Product | `prod_UhMcM7booJPkrK` |
-| Price — Pro Monthly ($9.99/mo) | `price_1ThxtDRXcnT9KWE4oAsX4x7Q` |
-| Price — Pro Annual ($99.99/yr) | `price_1ThxtDRXcnT9KWE40NcEyF4X` |
-| Payment Link — Monthly | `https://buy.stripe.com/test_4gMeVf6a6bh67qo3lpao800` |
-| Payment Link — Annual | `https://buy.stripe.com/test_3cI6oJ6a65WMfWU2hlao801` |
+| Price -- Pro Monthly ($9.99/mo) | `price_1ThxtDRXcnT9KWE4oAsX4x7Q` |
+| Price -- Pro Annual ($99.99/yr) | `price_1ThxtDRXcnT9KWE40NcEyF4X` |
+| Payment Link -- Monthly | `https://buy.stripe.com/test_4gMeVf6a6bh67qo3lpao800` |
+| Payment Link -- Annual | `https://buy.stripe.com/test_3cI6oJ6a65WMfWU2hlao801` |
 
 The two `price_...` IDs are the `PRICE_PRO_MONTHLY` / `PRICE_PRO_ANNUAL` env vars
 for the webhook. Upstash Redis is already provisioned (Stripe Projects, free tier).

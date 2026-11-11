@@ -1,4 +1,4 @@
-# Chronos Timekeeping — Disclaimer
+# Chronos Timekeeping -- Disclaimer
 
 **Effective Date:** June 13, 2026
 **Last Updated:** June 13, 2026
@@ -7,7 +7,7 @@ This Disclaimer is incorporated into and forms part of the Chronos Timekeeping *
 Service & End User License Agreement** (the "Agreement"). Capitalized terms have the meanings
 given in the Agreement. If there is any conflict, the Agreement controls.
 
-## 1. "AS IS" — No Warranties
+## 1. "AS IS" -- No Warranties
 
 THE CHRONOS SOFTWARE, WEBSITE, AND SERVICE (TOGETHER, THE "SERVICE") ARE PROVIDED **"AS IS"**
 AND **"AS AVAILABLE,"** WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND, WHETHER EXPRESS,
@@ -24,7 +24,7 @@ inherently imperfect. **Detection can be wrong, incomplete, delayed, or misclass
 results vary by operating system, configuration, third-party tools, file types, and
 environment.
 
-Any stated accuracy figures — including "95%+ accuracy" or similar — are **general engineering
+Any stated accuracy figures -- including "95%+ accuracy" or similar -- are **general engineering
 estimates measured under specific test conditions, not promises, warranties, or guarantees**
 of the results you will obtain.
 
@@ -39,8 +39,8 @@ consequences arising from reliance on Chronos data.
 
 Chronos is a software tool, not a professional service. Nothing it produces constitutes legal,
 accounting, tax, billing-compliance, or other professional advice, and no professional
-relationship is created by your use of it. AI-generated outputs — including the conversion of
-AI activity into "human-equivalent" or "contributing" hours — are **automated estimates** and
+relationship is created by your use of it. AI-generated outputs -- including the conversion of
+AI activity into "human-equivalent" or "contributing" hours -- are **automated estimates** and
 may be inaccurate. Consult a qualified professional before relying on any output for
 regulated, billable, or legally significant purposes.
 
@@ -83,7 +83,7 @@ maximum extent permitted by law.
 
 ## 9. Contact
 
-Questions about this Disclaimer: **legal@chronos-timekeeping.com** ·
+Questions about this Disclaimer: **legal@chronos-timekeeping.com** &middot;
 **https://chronos-timekeeping.com**
 
 ---

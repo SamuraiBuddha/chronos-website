@@ -57,7 +57,7 @@
 
     <!-- Tagline with features -->
     <text x="600" y="400" font-family="Arial, sans-serif" font-size="24" fill="#a8aac5" text-anchor="middle" font-weight="500">
-      95%+ Accuracy • Patent Pending • Local Processing
+      95%+ Accuracy &#x2022; Patent Pending &#x2022; Local Processing
     </text>
 
     <!-- Website URL at bottom -->

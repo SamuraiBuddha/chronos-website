@@ -27,7 +27,7 @@ const PAGES = [
 
 function escapeHtml(s) {
   return s
-    .replace(/&/g, '&amp;')
+    .replace(/&(?!(?:#\d+|#x[0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]*);)/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 }
@@ -35,6 +35,9 @@ function escapeHtml(s) {
 // Inline formatting -- run AFTER escaping so injected tags survive.
 function inline(text) {
   let t = escapeHtml(text);
+  // ASCII source convention: ' -- ' is an em dash. The .md files stay pure ASCII
+  // (see the fleet non-ASCII rule); the typography is produced here.
+  t = t.replace(/ -- /g, ' &mdash; ');
   // links [text](url)  (escaped '>' inside url is unlikely; urls here are plain)
   t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
   // bold **text**

@@ -1,4 +1,4 @@
-# Chronos Timekeeping — Terms of Service & End User License Agreement
+# Chronos Timekeeping -- Terms of Service & End User License Agreement
 
 **Effective Date:** June 13, 2026
 **Last Updated:** June 13, 2026
@@ -14,7 +14,7 @@
 
 ---
 
-## 0. IMPORTANT — PLEASE READ
+## 0. IMPORTANT -- PLEASE READ
 
 THESE TERMS OF SERVICE AND END USER LICENSE AGREEMENT (THIS **"AGREEMENT"**) ARE A LEGALLY
 BINDING CONTRACT BETWEEN YOU (**"YOU,"** **"YOUR,"** **"USER,"** OR **"CUSTOMER"**) AND THE
@@ -35,8 +35,8 @@ The **Provider** is **Jordan P. Ehrig, Sr.**, an individual sole proprietor doin
 **"Chronos"** and **"Chronos Timekeeping,"** located in the State of Florida, United States
 (contact: **legal@chronos-timekeeping.com**; **https://chronos-timekeeping.com**).
 
-> **[ACTION ITEM — replace before publishing]** If and when you form a limited liability
-> company (strongly recommended — see the note at the end of this file), replace the line
+> **[ACTION ITEM -- replace before publishing]** If and when you form a limited liability
+> company (strongly recommended -- see the note at the end of this file), replace the line
 > above with: *"the Provider is **[Chronos Timekeeping LLC]**, a Florida limited liability
 > company."* The liability protections in this Agreement run to the contracting entity;
 > the entity should be the LLC, not you personally.
@@ -190,7 +190,7 @@ licenses immediately if you breach this Agreement, fail to pay, or use the Servi
 You may stop using the Service and uninstall the Software at any time. **On termination:**
 (a) your licenses end and you must cease use; (b) you may, where technically feasible, export
 your Time Data for a reasonable period before deletion; and (c) Sections 5, 6.5, 8.5, 9,
-10–17 survive.
+10&ndash;17 survive.
 
 ## 10. Intellectual Property; Feedback
 
@@ -267,7 +267,7 @@ with us.
 
 ## 15. Dispute Resolution; Governing Law; Arbitration; Class Waiver
 
-**Please read this Section carefully — it affects how disputes are resolved.**
+**Please read this Section carefully -- it affects how disputes are resolved.**
 
 1. **Governing law.** This Agreement is governed by the laws of the **State of Florida** and
    applicable U.S. federal law, without regard to conflict-of-laws rules. The U.N. Convention
@@ -277,7 +277,7 @@ with us.
    first contact us at legal@chronos-timekeeping.com and attempt to resolve the dispute
    informally for at least thirty (30) days.
 
-3. **Binding arbitration.** Except as provided in Sections 15.5–15.6, any dispute, claim, or
+3. **Binding arbitration.** Except as provided in Sections 15.5&ndash;15.6, any dispute, claim, or
    controversy arising out of or relating to this Agreement or the Service will be resolved by
    **final and binding arbitration** administered by the American Arbitration Association
    (AAA) under its applicable rules (the Consumer Arbitration Rules where you are a consumer).
@@ -300,7 +300,7 @@ with us.
    of competent jurisdiction in Florida to protect its intellectual property or confidential
    information.
 
-7. **30-day right to opt out of arbitration.** You may opt out of Sections 15.3–15.4 by
+7. **30-day right to opt out of arbitration.** You may opt out of Sections 15.3&ndash;15.4 by
    emailing legal@chronos-timekeeping.com within thirty (30) days of first accepting this
    Agreement, stating your name and intent to opt out. If you opt out, disputes will be
    resolved in the state or federal courts located in **[COUNTY] County, Florida**, and you
@@ -343,7 +343,7 @@ changes take effect constitutes acceptance. If you do not agree, stop using the 
 
 ## 18. Contact
 
-Questions about this Agreement: **legal@chronos-timekeeping.com** ·
+Questions about this Agreement: **legal@chronos-timekeeping.com** &middot;
 **https://chronos-timekeeping.com**
 
 ---
@@ -351,6 +351,6 @@ Questions about this Agreement: **legal@chronos-timekeeping.com** ·
 *This document is a template for the Chronos Timekeeping product. It is not legal advice. It
 should be reviewed and finalized by a licensed Florida attorney before publication, and the
 bracketed placeholders ([COUNTY], entity name, etc.) must be completed. Forming a single-member
-LLC and contracting through that entity — rather than as an individual sole proprietor — is the
+LLC and contracting through that entity -- rather than as an individual sole proprietor -- is the
 primary way to shield personal assets; this Agreement limits the size of claims but cannot, by
 itself, create that corporate shield.*

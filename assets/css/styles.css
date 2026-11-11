@@ -275,7 +275,7 @@ body {
 }
 
 .feature-list li:before {
-    content: "✓";
+    content: "\2713";
     position: absolute;
     left: 0;
     color: var(--success);
@@ -384,7 +384,7 @@ body {
 }
 
 .pricing-features li:before {
-    content: "✓";
+    content: "\2713";
     color: var(--success);
     font-weight: bold;
     margin-right: 0.5rem;
